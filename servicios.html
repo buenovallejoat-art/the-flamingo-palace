@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<!-- Define el tipo de documento HTML5 y el idioma español -->
+<html lang="es">
+<head>
+    <!-- Configuración de caracteres especiales (acentos, eñes) y vista adaptable en celulares -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Descripción del contenido de la página para buscadores -->
+    <meta name="description" content="Catálogo de nuestras 10 habitaciones y suites en The Flamingo Palace, Bucerías, Nayarit.">
+    <!-- Título que aparece en la pestaña del navegador -->
+    <title>The Flamingo Palace | Nuestras 10 Habitaciones</title>
+    <!-- Enlace a la hoja de estilos CSS externa -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- Encabezado principal del sitio con título, descripción y barra de navegación -->
+    <header class="site-header">
+        <section class="header-brand">
+            <h1>Nuestras Habitaciones y Suites</h1>
+            <p>Elige entre nuestras 10 exclusivas habitaciones diseñadas para tu descanso</p>
+        </section>
+
+        <!-- Botón hamburguesa para abrir el menú en pantallas móviles -->
+        <button type="button" class="menu-toggle" id="menu-toggle" aria-label="Abrir menú de navegación" aria-expanded="false">
+            ☰ Menú
+        </button>
+
+        <!-- Menú de navegación con los enlaces a las páginas del sitio -->
+        <nav aria-label="Navegación principal" id="nav-drawer">
+            <ul class="nav-links" id="nav-links">
+                <!-- Botón interno para cerrar el menú desplegable en dispositivos móviles -->
+                <li class="nav-close-item">
+                    <button type="button" class="menu-close" id="menu-close" aria-label="Cerrar menú">✕</button>
+                </li>
+                <li><a href="index.html">Inicio</a></li>
+                <!-- Enlace resaltado como activo porque corresponde a la página actual -->
+                <li><a href="servicios.html" class="active">Habitaciones (10)</a></li>
+                <li><a href="contacto.html">Reservar / Mi Cuenta</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Contenido principal de la página -->
+    <main class="container">
+        <!-- Tarjeta contenedora del catálogo completo de habitaciones -->
+        <section class="panel-card" aria-labelledby="catalogo-title">
+            <header class="panel-header">
+                <h2 id="catalogo-title">Catálogo Completo de Nuestras 10 Habitaciones</h2>
+                <p>Consulta la disponibilidad en tiempo real. Puedes reservar una o varias habitaciones en el mismo formulario.</p>
+            </header>
+            <!-- Cuadrícula de 3 columnas que organiza todas las tarjetas de habitaciones -->
+            <section class="grid-catalogo" id="catalogo-habitaciones">
+                <!-- Tarjeta 1: Habitación 101 (el atributo data-hab-id permite que JavaScript actualice su disponibilidad) -->
+                <article class="card" data-hab-id="101_estandar_arena">
+                    <figure>
+                        <img src="https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=600&q=80" alt="Habitación 101 Estándar Arena">
+                        <figcaption>Capacidad: 2-4 Personas</figcaption>
+                    </figure>
+                    <!-- Etiqueta visual que indica si la habitación está disponible u ocupada -->
+                    <p class="estado-badge libre" data-badge="101_estandar_arena">Disponible</p>
+                    <h3>101. Estándar Arena</h3>
+                    <p>Dos camas matrimoniales, vista a los jardines tropicales y aire acondicionado.</p>
+                    <p class="precio">$1,850 MXN <small>/ noche</small></p>
+                    <!-- Botón que dirige al formulario enviando el ID de esta habitación en la URL -->
+                    <a href="contacto.html?hab=101_estandar_arena#formulario" class="btn-primary" data-btn="101_estandar_arena">Reservar Estándar Arena</a>
+                </article>
+                <!-- Tarjeta 2: Habitación 102 -->
+                <article class="card" data-hab-id="102_estandar_brisa">
+                    <figure>
+                        <img src="https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=600&q=80" alt="Habitación 102 Estándar Brisa">
+                        <figcaption>Capacidad: 2 Personas</figcaption>
+                    </figure>
+                    <p class="estado-badge libre" data-badge="102_estandar_brisa">Disponible</p>
+                    <h3>102. Estándar Brisa</h3>
+                    <p>Cama Queen Size, balcón privado con hamaca y acceso directo a zona de alberca.</p>
+                    <p class="precio">$1,950 MXN <small>/ noche</small></p>
+                    <a href="contacto.html?hab=102_estandar_brisa#formulario" class="btn-primary" data-btn="102_estandar_brisa">Reservar Estándar Brisa</a>
+                </article>
+                <!-- Tarjeta 3: Habitación 103 -->
+                <article class="card" data-hab-id="103_doble_coral">
+                    <figure>
+                        <img src="https://images.unsplash.com/photo-1566665797739-1674de7a421a?auto=format&fit=crop&w=600&q=80" alt="Habitación 103 Doble Coral">
+                        <figcaption>Capacidad: 4 Personas</figcaption>
+                    </figure>
+                    <p class="estado-badge libre" data-badge="103_doble_coral">Disponible</p>
+                    <h3>103. Doble Coral</h3>
+                    <p>Amplia habitación familiar con dos camas Queen, cafetera y terraza soleada.</p>
+                    <p class="precio">$2,200 MXN <small>/ noche</small></p>
+                    <a href="contacto.html?hab=103_doble_coral#formulario" class="btn-primary" data-btn="103_doble_coral">Reservar Doble Coral</a>
+                </article>
+                <!-- Tarjeta 4: Habitación 104 -->
+                <article class="card" data-hab-id="104_el_paraiso_hassel">
+                    <figure>
+                        <img src="https://images.unsplash.com/photo-1595576508898-0ad5c879a061?auto=format&fit=crop&w=600&q=80" alt="Habitación 104 El Paraíso con Hassel">
+                        <figcaption>Capacidad: 2 Personas</figcaption>
+                    </figure>
+                    <p class="estado-badge libre" data-badge="104_el_paraiso_hassel">Disponible</p>
+                    <h3>104. El Paraíso con Hassel</h3>
+                    <p>Cama King Size, sala de lectura iluminada y vista panorámica a la bahía de Bucerías.</p>
+                    <p class="precio">$2,650 MXN <small>/ noche</small></p>
+                    <a href="contacto.html?hab=104_el_paraiso_hassel#formulario" class="btn-primary" data-btn="104_el_paraiso_hassel">Reservar El Paraíso</a>
+                </article>
+                <!-- Tarjeta 5: Habitación 201 -->
+                <article class="card" data-hab-id="201_suite_flamingo_sol">
+                    <figure>
+                        <img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=600&q=80" alt="Habitación 201 Suite Flamingo Sol">
+                        <figcaption>Capacidad: 2 Personas</figcaption>
+                    </figure>
+                    <p class="estado-badge libre" data-badge="201_suite_flamingo_sol">Disponible</p>
+                    <h3>201. Suite Flamingo Sol</h3>
+                    <p>Frente al mar con balcón panorámico, cama King Size y desayuno buffet incluido.</p>
+                    <p class="precio">$3,200 MXN <small>/ noche</small></p>
+                    <a href="contacto.html?hab=201_suite_flamingo_sol#formulario" class="btn-primary" data-btn="201_suite_flamingo_sol">Reservar Suite Flamingo Sol</a>
+                </article>
+                <!-- Tarjeta 6: Habitación 202 -->
+                <article class="card" data-hab-id="202_suite_atardecer">
+                    <figure>
+                        <img src="https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&w=600&q=80" alt="Habitación 202 Suite Atardecer">
+                        <figcaption>Capacidad: 2-3 Personas</figcaption>
+                    </figure>
+                    <p class="estado-badge libre" data-badge="202_suite_atardecer">Disponible</p>
+                    <h3>202. Suite Atardecer</h3>
+                    <p>Orientación oeste ideal para ver la puesta de sol sobre el Pacífico desde tu terraza.</p>
+                    <p class="precio">$3,450 MXN <small>/ noche</small></p>
+                    <a href="contacto.html?hab=202_suite_atardecer#formulario" class="btn-primary" data-btn="202_suite_atardecer">Reservar Suite Atardecer</a>
+                </article>
+                <!-- Tarjeta 7: Habitación 203 -->
+                <article class="card" data-hab-id="203_suite_costa_dorada">
+                    <figure>
+                        <img src="https://images.unsplash.com/photo-1591088398332-8a7791972843?auto=format&fit=crop&w=600&q=80" alt="Habitación 203 Suite Costa Dorada">
+                        <figcaption>Capacidad: 4 Personas</figcaption>
+                    </figure>
+                    <p class="estado-badge libre" data-badge="203_suite_costa_dorada">Disponible</p>
+                    <h3>203. Suite Costa Dorada</h3>
+                    <p>Dos camas matrimoniales de lujo, comedor privado y acceso preferencial a camastros.</p>
+                    <p class="precio">$3,800 MXN <small>/ noche</small></p>
+                    <a href="contacto.html?hab=203_suite_costa_dorada#formulario" class="btn-primary" data-btn="203_suite_costa_dorada">Reservar Costa Dorada</a>
+                </article>
+                <!-- Tarjeta 8: Habitación 204 -->
+                <article class="card" data-hab-id="204_bungalow_tropical">
+                    <figure>
+                        <img src="https://images.unsplash.com/photo-1618773928121-c32242e63f39?auto=format&fit=crop&w=600&q=80" alt="Habitación 204 Bungalow Tropical">
+                        <figcaption>Capacidad: 4 Personas</figcaption>
+                    </figure>
+                    <p class="estado-badge libre" data-badge="204_bungalow_tropical">Disponible</p>
+                    <h3>204. Bungalow Tropical</h3>
+                    <p>Cabaña independiente rodeada de palmeras a pocos pasos de la arena.</p>
+                    <p class="precio">$4,300 MXN <small>/ noche</small></p>
+                    <a href="contacto.html?hab=204_bungalow_tropical#formulario" class="btn-primary" data-btn="204_bungalow_tropical">Reservar Bungalow Tropical</a>
+                </article>
+                <!-- Tarjeta 9: Habitación 301 -->
+                <article class="card" data-hab-id="301_master_pacifico">
+                    <figure>
+                        <img src="https://images.unsplash.com/photo-1540518614846-7eded433c457?auto=format&fit=crop&w=600&q=80" alt="Habitación 301 Master Suite Pacífico">
+                        <figcaption>Capacidad: 4-5 Personas</figcaption>
+                    </figure>
+                    <p class="estado-badge libre" data-badge="301_master_pacifico">Disponible</p>
+                    <h3>301. Master Suite Pacífico</h3>
+                    <p>Recámara principal King, sala lounge con sofá cama y tina de hidromasaje.</p>
+                    <p class="precio">$5,100 MXN <small>/ noche</small></p>
+                    <a href="contacto.html?hab=301_master_pacifico#formulario" class="btn-primary" data-btn="301_master_pacifico">Reservar Master Pacífico</a>
+                </article>
+                <!-- Tarjeta 10: Habitación 302 -->
+                <article class="card" data-hab-id="302_suite_presidencial">
+                    <figure>
+                        <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?auto=format&fit=crop&w=600&q=80" alt="Habitación 302 Suite Presidencial">
+                        <figcaption>Capacidad: Hasta 6 Personas</figcaption>
+                    </figure>
+                    <p class="estado-badge libre" data-badge="302_suite_presidencial">Disponible</p>
+                    <h3>302. Suite Presidencial</h3>
+                    <p>Dos recámaras, jacuzzi privado en terraza panorámica y servicio VIP 24 horas.</p>
+                    <p class="precio">$6,500 MXN <small>/ noche</small></p>
+                    <a href="contacto.html?hab=302_suite_presidencial#formulario" class="btn-primary" data-btn="302_suite_presidencial">Reservar Suite Presidencial</a>
+                </article>
+            </section>
+        </section>
+    </main>
+    <!-- Pie de página con dirección, redes sociales y derechos de autor -->
+    <footer class="site-footer">
+        <section>
+            <h3>The Flamingo Palace</h3>
+            <p>Av. Pacífico #104, Bucerías, Nayarit, México.</p>
+        </section>
+        <!-- Enlaces a redes sociales con iconos vectoriales (SVG) -->
+        <nav class="footer-social" aria-label="Redes sociales en pie de página">
+            <a href="https://www.instagram.com/theflamingopalace/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                </svg>
+            </a>
+            <a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+                </svg>
+            </a>
+        </nav>
+        <section>
+            <p>&copy; 2026 The Flamingo Palace. Todos los derechos reservados.</p>
+        </section>
+    </footer>
+    <!-- Conexión modular con JavaScript y Firebase Firestore para actualizar disponibilidad en tiempo real -->
+    <script type="module" src="main.js"></script>
+</body>
+</html>

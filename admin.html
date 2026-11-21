@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<!-- Declaración del estándar HTML5 -->
+<html lang="es">
+<!-- Inicio del documento configurado en español -->
+
+<head>
+    <!-- Codificación UTF-8 para soportar acentos, eñes y símbolos especiales -->
+    <meta charset="UTF-8">
+    <!-- Vista adaptable (Responsive) para visualizar el panel en computadoras, tabletas o celulares -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Descripción del propósito administrativo de esta vista privada -->
+    <meta name="description" content="Panel administrativo privado de control de habitaciones - The Flamingo Palace.">
+    <!-- Título que aparece en la pestaña del navegador -->
+    <title>The Flamingo Palace | Sistema Interno Empresa</title>
+    <!-- Enlace a la hoja de estilos CSS3 compartida por todo el sistema -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <!-- ===================================================================== -->
+    <!-- ENCABEZADO ADMINISTRATIVO (HEADER) CON ACCESO DIRECTO AL SITIO PÚBLICO -->
+    <!-- ===================================================================== -->
+    <header class="site-header">
+        <!-- Identificación del sistema interno de la empresa -->
+        <section class="header-brand">
+            <h1>Sistema Interno — The Flamingo Palace</h1>
+            <p>Panel exclusivo de administración de habitaciones, fechas límite y reservaciones</p>
+        </section>
+
+        <!-- Navegación rápida para abrir el sitio público en una pestaña nueva sin cerrar el panel -->
+        <nav aria-label="Navegación administrativa">
+            <ul class="nav-links" style="display: flex; position: static; height: auto; width: auto; background: transparent; box-shadow: none; padding: 0;">
+                <li><a href="index.html" target="_blank" rel="noopener noreferrer">Abrir Sitio Público &nearr;</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- ===================================================================== -->
+    <!-- CONTENEDOR PRINCIPAL (MAIN): LOGIN DE EMPRESA Y TABLERO DE CONTROL    -->
+    <!-- ===================================================================== -->
+    <main class="container">
+
+        <!-- BLOQUE 1: Pantalla de autenticación para personal autorizado (visible por defecto) -->
+        <section id="admin-login-box" class="form-wrapper panel-card">
+            <header class="panel-header">
+                <h2>Acceso Administrativo</h2>
+                <p>Ingresa las credenciales del personal autorizado de The Flamingo Palace.</p>
+            </header>
+
+            <!-- Formulario de inicio de sesión validado en main.js mediante sessionStorage -->
+            <form id="form-admin-login" class="booking-form">
+                <label for="admin_user">Usuario Empresa *</label>
+                <input type="text" id="admin_user" placeholder="admin" required>
+
+                <label for="admin_pass">Contraseña Empresa *</label>
+                <input type="password" id="admin_pass" placeholder="••••••••" required>
+
+                <!-- Nota guía de credenciales para demostración -->
+                <small class="helper-text" style="display:block; margin-top:0.5rem;">
+                    Credenciales de acceso: Usuario <strong>admin</strong> | Contraseña <strong>flamingo2026</strong>
+                </small>
+
+                <button type="submit" class="btn-primary btn-block" style="margin-top: 1rem;">Ingresar al Panel</button>
+            </form>
+        </section>
+
+        <!-- BLOQUE 2: Tablero de control general (permanece oculto con "hidden" hasta iniciar sesión) -->
+        <section id="admin-dashboard" class="panel-card" hidden>
+            <header class="panel-header admin-top-bar">
+                <section>
+                    <h2>Control General de Habitaciones y Base de Datos</h2>
+                    <p>Monitorea qué habitaciones están ocupadas, hasta qué fecha se desocupan y libera estancias.</p>
+                </section>
+                <!-- Botón que cierra la sesión administrativa y vuelve a ocultar el tablero -->
+                <button type="button" id="btn-cerrar-admin" class="btn-secondary">Cerrar Sesión</button>
+            </header>
+
+            <!-- Tarjetas de resumen estadístico calculadas en tiempo real desde Firestore -->
+            <section class="grid-catalogo-mini" style="margin-bottom: 1.5rem;">
+                <article class="card" style="padding: 1rem;">
+                    <h3>Estado de Ocupación</h3>
+                    <!-- Contador dinámico de habitaciones ocupadas vs libres -->
+                    <p id="admin-resumen-ocupacion" class="precio">0 Ocupadas / 10 Libres</p>
+                </article>
+                <article class="card" style="padding: 1rem;">
+                    <h3>Ingresos por Reservaciones Activas</h3>
+                    <!-- Suma total en MXN de las reservaciones con estado "Activa" -->
+                    <p id="admin-resumen-ingresos" class="precio">$0 MXN</p>
+                </article>
+            </section>
+
+            <!-- TABLA 1: Monitoreo individual de las 10 habitaciones del hotel -->
+            <h3 style="color: var(--color-primary-dark); margin-bottom: 0.75rem;">1. Estado Actual de las 10 Habitaciones</h3>
+            <section class="table-responsive">
+                <table class="tabla-admin">
+                    <thead>
+                        <tr>
+                            <th>Habitación</th>
+                            <th>Tarifa / Noche</th>
+                            <th>Estado</th>
+                            <th>Huésped</th>
+                            <th>Se desocupa el (Fecha Límite)</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+                    <!-- Cuerpo de tabla inyectado dinámicamente por main.js -->
+                    <tbody id="tabla-estado-habitaciones">
+                        <!-- Llenado automático desde main.js -->
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- TABLA 2: Registro histórico completo de reservaciones almacenadas en la nube -->
+            <h3 style="color: var(--color-primary-dark); margin: 2rem 0 0.75rem;">2. Historial de Reservaciones Registradas</h3>
+            <section class="table-responsive">
+                <table class="tabla-admin">
+                    <thead>
+                        <tr>
+                            <th>Folio</th>
+                            <th>Huésped (Usuario / Personas)</th>
+                            <th>Habitaciones Reservadas</th>
+                            <th>Check-in &rarr; Fecha Límite</th>
+                            <th>Total</th>
+                            <th>Estatus</th>
+                            <th>Control</th>
+                        </tr>
+                    </thead>
+                    <!-- Cuerpo de tabla con todas las reservaciones activas y canceladas de Firestore -->
+                    <tbody id="tabla-reservaciones-admin">
+                        <!-- Llenado automático desde main.js -->
+                    </tbody>
+                </table>
+            </section>
+        </section>
+
+    </main>
+
+    <!-- ===================================================================== -->
+    <!-- PIE DE PÁGINA (FOOTER) DEL SISTEMA INTERNO                            -->
+    <!-- ===================================================================== -->
+    <footer class="site-footer">
+        <section>
+            <h3>The Flamingo Palace</h3>
+            <p>Av. Pacífico #104, Bucerías, Nayarit, México.</p>
+        </section>
+        <section>
+            <p>&copy; 2026 The Flamingo Palace. Sistema de Control Interno.</p>
+        </section>
+    </footer>
+
+    <!-- Enlace modular (type="module") al controlador JavaScript conectado con Firebase Firestore -->
+    <script type="module" src="main.js"></script>
+</body>
+</html>
