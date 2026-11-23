@@ -1,180 +1,163 @@
-<!DOCTYPE html>
-<!-- Indica que el documento usa HTML5 y el idioma es español -->
-<html lang="es">
-<head>
-    <!-- Configuración de caracteres especiales (acentos, eñes) y diseño adaptable a celulares -->
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Descripción breve de la página para los buscadores -->
-    <meta name="description" content="Formulario de registro, reservación múltiple y gestión de cuenta - The Flamingo Palace.">
-    <!-- Título que se muestra en la pestaña del navegador -->
-    <title>The Flamingo Palace | Reservaciones y Mi Cuenta</title>
-    <!-- Conexión con la hoja de estilos CSS -->
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <!-- Encabezado principal de la página con título, subtítulo y menú -->
-    <header class="site-header">
-        <section class="header-brand">
-            <h1>Reservaciones y Gestión de Cuenta</h1>
-            <p>Reserva una o más habitaciones y administra tu estancia frente al mar</p>
-        </section>
+<!DOCTYPE html> <!-- Indica al navegador que el documento usa HTML5 -->
+<html lang="es"> <!-- Etiqueta raíz del documento en idioma español -->
+<head> <!-- Cabecera con configuración, título y estilos -->
+    <meta charset="UTF-8"> <!-- Permite mostrar acentos, la ñ y caracteres especiales -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Adapta el diseño a celulares y tabletas -->
+    <meta name="description" content="Formulario de registro, reservación múltiple y gestión de cuenta - The Flamingo Palace."> <!-- Descripción breve de la página para buscadores -->
+    <title>The Flamingo Palace | Reservaciones y Mi Cuenta</title> <!-- Título que aparece en la pestaña del navegador -->
+    <link rel="stylesheet" href="styles.css"> <!-- Enlaza la hoja de estilos CSS externa -->
+</head> <!-- Cierra la cabecera del documento -->
+<body> <!-- Inicia el contenido visible de la página -->
+    <header class="site-header"> <!-- Encabezado superior del sitio -->
+        <section class="header-brand"> <!-- Agrupa el título y subtítulo de la página -->
+            <h1>Reservaciones y Gestión de Cuenta</h1> <!-- Título principal de esta sección -->
+            <p>Reserva una o más de nuestras 20 habitaciones y administra tu estancia frente al mar</p> <!-- Subtítulo explicativo para el huésped -->
+        </section> <!-- Cierra la sección de marca -->
 
-        <!-- Botón hamburguesa para abrir el menú en pantallas móviles -->
-        <button type="button" class="menu-toggle" id="menu-toggle" aria-label="Abrir menú de navegación" aria-expanded="false">
-            ☰ Menú
-        </button>
+        <button type="button" class="menu-toggle" id="menu-toggle" aria-label="Abrir menú de navegación" aria-expanded="false"> <!-- Botón para abrir el menú en celulares -->
+            ☰ Menú <!-- Ícono y texto del botón móvil -->
+        </button> <!-- Cierra el botón del menú -->
 
-        <!-- Barra de navegación con los enlaces principales del sitio -->
-        <nav aria-label="Navegación principal" id="nav-drawer">
-            <ul class="nav-links" id="nav-links">
-                <!-- Botón interno para cerrar el menú desplegable en dispositivos móviles -->
-                <li class="nav-close-item">
-                    <button type="button" class="menu-close" id="menu-close" aria-label="Cerrar menú">✕</button>
-                </li>
-                <li><a href="index.html">Inicio</a></li>
-                <li><a href="servicios.html">Habitaciones (10)</a></li>
-                <!-- Enlace marcado como activo porque corresponde a esta misma página -->
-                <li><a href="contacto.html" class="active">Reservar / Mi Cuenta</a></li>
-            </ul>
-        </nav>
-    </header>
+        <nav aria-label="Navegación principal" id="nav-drawer"> <!-- Barra de navegación principal -->
+            <ul class="nav-links" id="nav-links"> <!-- Lista de enlaces del menú -->
+                <li class="nav-close-item"> <!-- Elemento que contiene el botón de cerrar -->
+                    <button type="button" class="menu-close" id="menu-close" aria-label="Cerrar menú">✕</button> <!-- Botón para cerrar el menú en móvil -->
+                </li> <!-- Cierra el elemento del botón -->
+                <li><a href="index.html">Inicio</a></li> <!-- Enlace hacia la página de inicio -->
+                <li><a href="servicios.html">Habitaciones (20)</a></li> <!-- Enlace hacia el catálogo de 20 habitaciones -->
+                <li><a href="contacto.html" class="active">Reservar / Mi Cuenta</a></li> <!-- Enlace activo de la página actual -->
+            </ul> <!-- Cierra la lista de navegación -->
+        </nav> <!-- Cierra la barra de navegación -->
+    </header> <!-- Cierra el encabezado superior -->
 
-    <!-- Contenedor principal en dos columnas: formulario a la izquierda y consulta de reserva a la derecha -->
-    <main class="container layout-dos-columnas" id="formulario">
-        <!-- Columna izquierda: Panel con el formulario de nueva reservación -->
-        <section class="panel-card" aria-label="Formulario de reservación">
-            <header class="panel-header">
-                <h2>Nueva Reservación (1 o más habitaciones)</h2>
-                <p>Selecciona tus habitaciones disponibles, fechas de entrada y salida, y crea tu usuario para consultar o cancelar después.</p>
-            </header>
+    <main class="container layout-dos-columnas" id="formulario"> <!-- Contenedor principal dividido en dos columnas -->
+        <section class="panel-card" aria-label="Formulario de reservación"> <!-- Columna izquierda con el formulario de reserva -->
+            <header class="panel-header"> <!-- Encabezado del formulario -->
+                <h2>Nueva Reservación (1 o más habitaciones)</h2> <!-- Subtítulo de la sección de reserva -->
+                <p>Selecciona tus habitaciones disponibles, fechas de entrada y salida, y crea tu usuario para consultar o cancelar después.</p> <!-- Instrucciones generales para llenar el formulario -->
+            </header> <!-- Cierra el encabezado del formulario -->
 
-            <!-- Cuadro oculto donde JavaScript muestra mensajes de éxito o error al enviar -->
-            <output id="alerta-formulario" class="alerta-box" hidden></output>
+            <output id="alerta-formulario" class="alerta-box" hidden></output> <!-- Caja oculta para alertas de éxito o error -->
+            <section id="ticket-confirmacion" hidden></section> <!-- Sección oculta donde se genera el comprobante final -->
 
-            <!-- Formulario de reservación (novalidate deja la validación en manos de JavaScript) -->
-            <form id="form-reservacion" class="booking-form" novalidate>
-                <!-- Primer grupo de campos: Datos personales y credenciales del huésped -->
-                <fieldset>
-                    <legend>1. Datos y Acceso del Huésped</legend>
+            <form id="form-reservacion" class="booking-form" novalidate> <!-- Formulario validado mediante JavaScript -->
+                <fieldset> <!-- Primer grupo de campos: datos personales -->
+                    <legend>1. Datos y Acceso del Huésped</legend> <!-- Título del primer bloque de datos -->
 
-                    <label for="nombre">Nombre Completo *</label>
-                    <input type="text" id="nombre" name="nombre" placeholder="Ej. Ana María López" required minlength="3" maxlength="80">
-                    <small class="error-msg" id="err-nombre"></small>
+                    <label for="nombre">Nombre Completo *</label> <!-- Etiqueta del campo de nombre -->
+                    <input type="text" id="nombre" name="nombre" placeholder="Ej. Ana María López" required minlength="3" maxlength="80"> <!-- Campo obligatorio para el nombre completo -->
+                    <small class="error-msg" id="err-nombre"></small> <!-- Mensaje de error si el nombre es inválido -->
 
-                    <label for="correo">Correo Electrónico *</label>
-                    <input type="email" id="correo" name="correo" placeholder="ejemplo@correo.com" required>
-                    <small class="error-msg" id="err-correo"></small>
+                    <label for="correo">Correo Electrónico *</label> <!-- Etiqueta del campo de correo -->
+                    <input type="email" id="correo" name="correo" placeholder="ejemplo@correo.com" required> <!-- Campo obligatorio para correo electrónico válido -->
+                    <small class="error-msg" id="err-correo"></small> <!-- Mensaje de error para correo inválido -->
 
-                    <label for="telefono">Teléfono de Contacto (10 dígitos) *</label>
-                    <input type="tel" id="telefono" name="telefono" placeholder="3221234567" pattern="[0-9]{10}" required>
-                    <small class="error-msg" id="err-telefono"></small>
+                    <label for="telefono">Teléfono de Contacto (10 dígitos) *</label> <!-- Etiqueta del campo de teléfono -->
+                    <input type="tel" id="telefono" name="telefono" placeholder="3221234567" pattern="[0-9]{10}" required> <!-- Campo numérico obligatorio de 10 dígitos -->
+                    <small class="error-msg" id="err-telefono"></small> <!-- Mensaje de error si faltan dígitos -->
 
-                    <label for="usuario_huesped">Crea tu Nombre de Usuario *</label>
-                    <input type="text" id="usuario_huesped" name="usuario_huesped" placeholder="Ej. analopez26" required minlength="4" maxlength="25">
-                    <small class="error-msg" id="err-usuario"></small>
+                    <label for="usuario_huesped">Crea tu Nombre de Usuario *</label> <!-- Etiqueta para crear usuario personal -->
+                    <input type="text" id="usuario_huesped" name="usuario_huesped" placeholder="Ej. analopez26" required minlength="4" maxlength="25"> <!-- Campo obligatorio para el nombre de usuario -->
+                    <small class="error-msg" id="err-usuario"></small> <!-- Mensaje de error si el usuario no cumple reglas -->
 
-                    <label for="password_huesped">Crea tu Contraseña (mínimo 4 caracteres) *</label>
-                    <input type="password" id="password_huesped" name="password_huesped" placeholder="••••••" required minlength="4">
-                    <small class="error-msg" id="err-password"></small>
-                </fieldset>
+                    <label for="password_huesped">Crea tu Contraseña (mínimo 4 caracteres) *</label> <!-- Etiqueta para crear contraseña -->
+                    <input type="password" id="password_huesped" name="password_huesped" placeholder="••••••" required minlength="4"> <!-- Campo obligatorio que oculta la contraseña -->
+                    <small class="error-msg" id="err-password"></small> <!-- Mensaje de error si la contraseña es corta -->
+                </fieldset> <!-- Cierra el primer grupo de campos -->
 
-                <!-- Segundo grupo de campos: Casillas para seleccionar una o varias habitaciones -->
-                <fieldset>
-                    <legend>2. Selección Múltiple de Habitaciones *</legend>
-                    <p class="helper-text">Marca una o varias habitaciones libres. Las ocupadas muestran hasta qué fecha se desocupan.</p>
+                <fieldset> <!-- Segundo grupo de campos: habitaciones -->
+                    <legend>2. Selección Múltiple de Habitaciones (20 disponibles en catálogo) *</legend> <!-- Título del bloque de selección de cuartos -->
+                    <p class="helper-text">Marca una o varias habitaciones libres. Las ocupadas muestran hasta qué fecha se desocupan.</p> <!-- Texto de ayuda sobre disponibilidad -->
 
-                    <!-- Contenedor que JavaScript llena automáticamente con las 10 habitaciones -->
-                    <section id="lista-checkbox-habitaciones" class="checkbox-grid" aria-label="Lista de habitaciones">
-                    </section>
-                    <small class="error-msg" id="err-habitaciones"></small>
-                </fieldset>
+                    <section id="lista-checkbox-habitaciones" class="checkbox-grid" aria-label="Lista de habitaciones"></section> <!-- Contenedor que JavaScript llena con 20 casillas -->
+                    <small class="error-msg" id="err-habitaciones"></small> <!-- Mensaje de error si no elige habitación -->
+                </fieldset> <!-- Cierra el segundo grupo de campos -->
 
-                <!-- Tercer grupo de campos: Fechas de llegada/salida, cantidad de huéspedes y comentarios -->
-                <fieldset>
-                    <legend>3. Fechas de Estancia (Entrada y Fecha Límite)</legend>
+                <fieldset> <!-- Tercer grupo de campos: fechas y huéspedes -->
+                    <legend>3. Fechas de Estancia (Entrada y Fecha Límite)</legend> <!-- Título del bloque de fechas y personas -->
 
-                    <label for="fecha_entrada">Fecha de Llegada (Check-in) *</label>
-                    <input type="date" id="fecha_entrada" name="fecha_entrada" required>
-                    <small class="error-msg" id="err-entrada"></small>
+                    <label for="fecha_entrada">Fecha de Llegada (Check-in) *</label> <!-- Etiqueta para la fecha de entrada -->
+                    <input type="date" id="fecha_entrada" name="fecha_entrada" required> <!-- Selector de calendario para llegada -->
+                    <small class="error-msg" id="err-entrada"></small> <!-- Mensaje de error para fecha de entrada -->
 
-                    <label for="fecha_limite">Fecha Límite / Salida (Check-out) *</label>
-                    <input type="date" id="fecha_limite" name="fecha_limite" required>
-                    <small class="error-msg" id="err-limite"></small>
+                    <label for="fecha_limite">Fecha Límite / Salida (Check-out) *</label> <!-- Etiqueta para la fecha de salida -->
+                    <input type="date" id="fecha_limite" name="fecha_limite" required> <!-- Selector de calendario para salida -->
+                    <small class="error-msg" id="err-limite"></small> <!-- Mensaje de error si salida es anterior a entrada -->
 
-                    <label for="adultos">Cantidad de Adultos *</label>
-                    <input type="number" id="adultos" name="adultos" min="1" max="15" value="2" required>
-                    <small class="error-msg" id="err-adultos"></small>
+                    <label for="adultos">Cantidad de Adultos *</label> <!-- Etiqueta del número de adultos -->
+                    <input type="number" id="adultos" name="adultos" min="1" max="15" value="2" required> <!-- Campo numérico para cantidad de adultos -->
+                    <small class="error-msg" id="err-adultos"></small> <!-- Mensaje de error para cantidad de adultos -->
 
-                    <label for="infantes">Cantidad de Infantes / Niños (0 a 12 años) *</label>
-                    <input type="number" id="infantes" name="infantes" min="0" max="10" value="0" required>
+                    <label for="infantes">Cantidad de Infantes / Niños (0 a 12 años) *</label> <!-- Etiqueta del número de niños -->
+                    <input type="number" id="infantes" name="infantes" min="0" max="10" value="0" required> <!-- Campo numérico para cantidad de infantes -->
 
-                    <label for="comentarios">Comentarios o Peticiones Especiales *</label>
-                    <textarea id="comentarios" name="comentarios" rows="3" placeholder="Horarios de llegada, alergias o solicitudes especiales..." required minlength="10" maxlength="500"></textarea>
-                    <small class="error-msg" id="err-comentarios"></small>
-                </fieldset>
+                    <label for="comentarios">Comentarios o Peticiones Especiales *</label> <!-- Etiqueta para observaciones del huésped -->
+                    <textarea id="comentarios" name="comentarios" rows="3" placeholder="Horarios de llegada, alergias o solicitudes especiales..." required minlength="10" maxlength="500"></textarea> <!-- Área de texto para peticiones especiales -->
+                    <small class="error-msg" id="err-comentarios"></small> <!-- Mensaje de error si el comentario es corto -->
+                </fieldset> <!-- Cierra el tercer grupo de campos -->
 
-                <!-- Recuadro donde se calcula y actualiza el costo total según habitaciones y noches -->
-                <p id="resumen-cotizacion" class="cotizacion-box">Total estimado: <strong>$0 MXN</strong> (0 noches)</p>
+                <!-- Cupón promocional de temporada -->
+                <fieldset> <!-- Cuarto grupo de campos: cupón de descuento -->
+                    <legend>4. Cupón de Descuento (Opcional)</legend> <!-- Título del bloque de promociones -->
+                    <div style="display: flex; gap: 0.6rem; flex-wrap: wrap;"> <!-- Contenedor en fila para input y botón -->
+                        <input type="text" id="codigo_cupon" placeholder="Ej. NAVIDAD25 o FLAMINGO50" style="flex: 1 1 200px; text-transform: uppercase;"> <!-- Campo para escribir el código en mayúsculas -->
+                        <button type="button" id="btn-aplicar-cupon" class="btn-secondary">Aplicar Cupón</button> <!-- Botón que valida y aplica el descuento -->
+                    </div> <!-- Cierra el contenedor del cupón -->
+                    <small id="msg-cupon" style="display: block; margin-top: 0.35rem; font-weight: 600;"></small> <!-- Texto que confirma si el cupón es válido -->
+                </fieldset> <!-- Cierra el cuarto grupo de campos -->
 
-                <!-- Botón principal para enviar y confirmar la reservación -->
-                <button type="submit" class="btn-primary btn-block">Confirmar Reservación</button>
-            </form>
-        </section>
+                <p id="resumen-cotizacion" class="cotizacion-box">Total estimado: <strong>$0 MXN</strong> (0 noches)</p> <!-- Muestra el costo total calculado en vivo -->
 
-        <!-- Columna derecha: Barra lateral para consultar o cancelar una reserva ya hecha -->
-        <aside class="panel-card sidebar-about" aria-labelledby="consulta-heading">
-            <header class="panel-header">
-                <h2 id="consulta-heading">Consultar o Cancelar mi Reserva</h2>
-                <p>Ingresa el usuario y contraseña que creaste al reservar.</p>
-            </header>
+                <button type="submit" class="btn-primary btn-block">Confirmar Reservación</button> <!-- Botón principal para guardar la reserva -->
+            </form> <!-- Cierra el formulario de reservación -->
+        </section> <!-- Cierra la columna izquierda -->
 
-            <!-- Formulario de inicio de sesión del huésped -->
-            <form id="form-consulta-huesped" class="booking-form" novalidate>
-                <label for="login_usuario">Usuario</label>
-                <input type="text" id="login_usuario" placeholder="Tu usuario" required>
+        <aside class="panel-card sidebar-about" aria-labelledby="consulta-heading"> <!-- Columna derecha para consultar o cancelar reservas -->
+            <header class="panel-header"> <!-- Encabezado de la sección lateral -->
+                <h2 id="consulta-heading">Consultar o Cancelar mi Reserva</h2> <!-- Subtítulo de gestión de cuenta -->
+                <p>Ingresa el usuario y contraseña que creaste al reservar.</p> <!-- Instrucción para iniciar sesión de huésped -->
+            </header> <!-- Cierra el encabezado lateral -->
 
-                <label for="login_password">Contraseña</label>
-                <input type="password" id="login_password" placeholder="Tu contraseña" required>
+            <form id="form-consulta-huesped" class="booking-form" novalidate> <!-- Formulario para buscar la reservación del cliente -->
+                <label for="login_usuario">Usuario</label> <!-- Etiqueta del campo de usuario -->
+                <input type="text" id="login_usuario" placeholder="Tu usuario" required> <!-- Campo para ingresar el usuario registrado -->
 
-                <button type="submit" class="btn-secondary btn-block" style="margin-top: 1rem;">Ver mi Reservación</button>
-            </form>
+                <label for="login_password">Contraseña</label> <!-- Etiqueta del campo de contraseña -->
+                <input type="password" id="login_password" placeholder="Tu contraseña" required> <!-- Campo para ingresar la contraseña registrada -->
 
-            <!-- Contenedor oculto donde aparecen los datos de la reservación al iniciar sesión -->
-            <section id="resultado-reserva-huesped" class="resultado-cuenta" hidden>
-            </section>
-        </aside>
-    </main>
+                <button type="submit" class="btn-secondary btn-block" style="margin-top: 1rem;">Ver mi Reservación</button> <!-- Botón que busca la reserva en Firebase -->
+            </form> <!-- Cierra el formulario de consulta -->
 
-    <!-- Pie de página con dirección, redes sociales y derechos de autor -->
-    <footer class="site-footer">
-        <section>
-            <h3>The Flamingo Palace</h3>
-            <p>Av. Pacífico #104, Bucerías, Nayarit, México.</p>
-        </section>
+            <section id="resultado-reserva-huesped" class="resultado-cuenta" hidden></section> <!-- Caja oculta donde se muestra la reserva -->
+        </aside> <!-- Cierra la columna derecha -->
+    </main> <!-- Cierra el contenedor principal -->
 
-        <!-- Iconos vectoriales (SVG) de Instagram y Facebook -->
-        <nav class="footer-social" aria-label="Redes sociales en pie de página">
-            <a href="https://www.instagram.com/theflamingopalace/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-                </svg>
-            </a>
-            <a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
-                </svg>
-            </a>
-        </nav>
+    <footer class="site-footer"> <!-- Pie de página del sitio -->
+        <section> <!-- Columna izquierda del pie de página -->
+            <h3>The Flamingo Palace</h3> <!-- Nombre del hotel -->
+            <p>Av. Pacífico #104, Bucerías, Nayarit, México.</p> <!-- Dirección física del establecimiento -->
+        </section> <!-- Cierra la primera sección del pie -->
 
-        <section>
-            <p>&copy; 2026 The Flamingo Palace. Todos los derechos reservados.</p>
-        </section>
-    </footer>
+        <nav class="footer-social" aria-label="Redes sociales en pie de página"> <!-- Íconos de redes sociales -->
+            <a href="https://www.instagram.com/theflamingopalace/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"> <!-- Enlace a Instagram en pestaña nueva -->
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> <!-- Ícono vectorial de Instagram -->
+                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect> <!-- Borde cuadrado redondeado -->
+                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path> <!-- Círculo central de la cámara -->
+                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line> <!-- Punto superior derecho -->
+                </svg> <!-- Cierra el ícono SVG -->
+            </a> <!-- Cierra el enlace de Instagram -->
+            <a href="https://www.facebook.com/profile.php?id=61573417950971&sk=photos&locale=es_LA" target="_blank" rel="noopener noreferrer" aria-label="Facebook"> <!-- Enlace a Facebook en pestaña nueva -->
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> <!-- Ícono vectorial de Facebook -->
+                    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path> <!-- Trazo de la letra f -->
+                </svg> <!-- Cierra el ícono SVG -->
+            </a> <!-- Cierra el enlace de Facebook -->
+        </nav> <!-- Cierra la navegación social del pie -->
 
-    <!-- Conexión modular con JavaScript y Firebase Firestore -->
-    <script type="module" src="main.js"></script>
-</body>
-</html>
+        <section> <!-- Columna derecha del pie de página -->
+            <p>&copy; 2026 The Flamingo Palace. Todos los derechos reservados.</p> <!-- Aviso de derechos de autor -->
+        </section> <!-- Cierra la última sección del pie -->
+    </footer> <!-- Cierra el pie de página -->
+
+    <script type="module" src="main.js"></script> <!-- Carga el archivo JavaScript principal como módulo -->
+</body> <!-- Cierra el cuerpo visible de la página -->
+</html> <!-- Cierra el documento HTML -->
