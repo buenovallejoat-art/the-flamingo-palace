@@ -24,12 +24,55 @@ const reservacionesRef = collection(db, "reservaciones"); /* tabla de reservacio
 
 const LOGO_HOTEL_URL = "https://i.ibb.co/FbTkwz5N/IMAGEN.jpg"; /* logo del hotel */
 
+function mostrarPantallaCargaLogo() { /* pantalla de carga con temporizador al navegar */
+  if (document.getElementById("pantalla-carga-flamingo")) return; /* evita duplicar pantalla */
+
+    const overlay = document.createElement("div"); /* crea contenedor pantalla completa */
+  overlay.id = "pantalla-carga-flamingo"; /* asigna id unico */
+      overlay.style.cssText = `
+        position: fixed;
+        inset: 0;
+        z-index: 99999;
+        background: linear-gradient(135deg, #fffbeb 0%, #ffedd5 100%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+        transition: opacity 0.4s ease;
+    `;
+
+  overlay.innerHTML = `
+        <img src="${LOGO_HOTEL_URL}" alt="The Flamingo Palace" style="width: 130px; height: 130px; border-radius: 50%; object-fit: cover; border: 4px solid #ea580c; box-shadow: 0 10px 25px rgba(234, 88, 12, 0.3);">
+        <h2 style="margin: 0; color: #c2410c; font-family: system-ui, sans-serif; font-size: 1.5rem;">The Flamingo Palace</h2>
+        <p style="margin: 0; color: #78350f; font-family: system-ui, sans-serif; font-size: 0.95rem;">Cargando experiencia frente al mar...</p>
+        <div style="width: 220px; height: 6px; background: #fed7aa; border-radius: 999px; overflow: hidden; margin-top: 0.25rem;">
+            <div id="barra-carga-flamingo" style="width: 0%; height: 100%; background: #ea580c; transition: width 1.4s linear;"></div>
+        </div>
+    `;
+
+    document.body.appendChild(overlay); /* muestra pantalla de carga */
+
+  requestAnimationFrame(() => { /* inicia animacion de barra */
+      const barra = document.getElementById("barra-carga-flamingo"); /* busca barra interna */
+    if (barra) barra.style.width = "100%"; /* llena barra al 100% */
+  });
+
+    setTimeout(() => { /* temporizador de 1.5 segundos */
+      overlay.style.opacity = "0"; /* desvanece pantalla */
+    setTimeout(() => overlay.remove(), 400); /* elimina elemento al terminar */
+    }, 1500);
+}
+
+mostrarPantallaCargaLogo(); /* ejecuta pantalla de carga al abrir o navegar */
+
 const CUPONES_VALIDOS = { /* codigos de descuento */
   "NAVIDAD25": 0.25, /* 25% de descuento */
       "FLAMINGO50": 0.50 /* 50% de descuento */
 };
 let descuentoAplicado = 0; /* guarda porcentaje descuento */
   let codigoCuponActivo = ""; /* guarda codigo aplicado */
+let reservaEnEdicion = null; /* guarda reserva cargada para modificar */
 
 const HABITACIONES_CATALOGO = [ /* catalogo de las 20 habitaciones */
     { id: "101_estandar_arena", nombre: "101. Estándar Arena", precio: 1850, capacidad: "Hasta 4 personas", amenidades: ["2 Camas Matrimoniales", "Balcón con vista al jardín tropical", "Aire acondicionado silencioso", "Wi-Fi de alta velocidad", "Smart TV 50\""] }, /* habitacion 101 */
@@ -316,8 +359,11 @@ function renderizarCheckboxesHabitaciones() { /* dibuja las 20 casillas en el fo
 
   HABITACIONES_CATALOGO.forEach(hab => { /* crea casilla por cada cuarto */
       const estado = obtenerEstadoHabitacion(hab.id); /* revisa disponibilidad */
+    const esDeReservaEditada = reservaEnEdicion && Array.isArray(reservaEnEdicion.habitaciones) && reservaEnEdicion.habitaciones.includes(hab.id); /* detecta cuarto propio en edicion */
+      const bloqueada = estado.ocupada && !esDeReservaEditada; /* bloquea solo si pertenece a otro */
+
     const label = document.createElement("label"); /* crea fila opcion */
-        label.className = estado.ocupada ? "checkbox-item ocupada-item" : "checkbox-item"; /* estilo disponible u ocupada */
+        label.className = bloqueada ? "checkbox-item ocupada-item" : "checkbox-item"; /* estilo disponible u ocupada */
 
     const checkbox = document.createElement("input"); /* crea casilla */
       checkbox.type = "checkbox"; /* tipo checkbox */
@@ -325,7 +371,7 @@ function renderizarCheckboxesHabitaciones() { /* dibuja las 20 casillas en el fo
     checkbox.value = hab.id; /* id cuarto */
       checkbox.dataset.precio = hab.precio; /* guarda precio noche */
 
-    if (estado.ocupada) checkbox.disabled = true; /* bloquea si esta ocupada */
+    if (bloqueada) checkbox.disabled = true; /* bloquea si esta ocupada por otro */
       else if (marcadasPrevias.has(hab.id) || (!listaCheckboxes.dataset.cargado && habPreseleccionada === hab.id)) checkbox.checked = true; /* marca si estaba elegida */
 
     checkbox.addEventListener("change", () => { /* recalcula total al marcar cuarto */
@@ -336,7 +382,7 @@ function renderizarCheckboxesHabitaciones() { /* dibuja las 20 casillas en el fo
     });
 
       const texto = document.createElement("span"); /* crea texto opcion */
-    texto.innerHTML = estado.ocupada /* muestra tarifa o fecha ocupada */
+    texto.innerHTML = bloqueada /* muestra tarifa o fecha ocupada */
         ? `<strong>${hab.nombre}</strong> — <em>Ocupada hasta ${estado.hasta}</em>`
           : `<strong>${hab.nombre}</strong> ($${hab.precio.toLocaleString("es-MX")} MXN/noche)`;
 
@@ -346,6 +392,59 @@ function renderizarCheckboxesHabitaciones() { /* dibuja las 20 casillas en el fo
   });
 
     listaCheckboxes.dataset.cargado = "true"; /* marca primera carga lista */
+}
+
+function cargarReservaEnFormulario(reserva) { /* llena todos los campos de contacto con la reserva */
+  const form = document.getElementById("form-reservacion"); /* busca formulario */
+    if (!form || !reserva) return; /* sale si no existe */
+
+  reservaEnEdicion = reserva.estado === "Activa" ? reserva : null; /* activa modo edicion si sigue vigente */
+    limpiarEstadosVisualesFormulario(); /* limpia bordes previos */
+
+  document.getElementById("nombre").value = reserva.nombre || ""; /* llena nombre */
+    document.getElementById("correo").value = reserva.correo || ""; /* llena correo */
+  document.getElementById("telefono").value = reserva.telefono || ""; /* llena telefono */
+    document.getElementById("usuario_huesped").value = reserva.usuario || ""; /* llena usuario */
+  document.getElementById("password_huesped").value = reserva.password || ""; /* llena clave */
+    document.getElementById("fecha_entrada").value = reserva.fechaEntrada || ""; /* llena fecha entrada */
+  document.getElementById("fecha_limite").value = reserva.fechaLimite || ""; /* llena fecha salida */
+    document.getElementById("adultos").value = reserva.adultos ?? 1; /* llena adultos */
+  document.getElementById("infantes").value = reserva.infantes ?? 0; /* llena infantes */
+    document.getElementById("comentarios").value = reserva.comentarios || ""; /* llena comentarios */
+
+  const inputCupon = document.getElementById("codigo_cupon"); /* campo cupon */
+    const msgCupon = document.getElementById("msg-cupon"); /* aviso cupon */
+  if (reserva.cupon && CUPONES_VALIDOS[reserva.cupon]) { /* restaura cupon si tenia */
+      descuentoAplicado = CUPONES_VALIDOS[reserva.cupon]; /* aplica descuento */
+    codigoCuponActivo = reserva.cupon; /* guarda codigo */
+      if (inputCupon) inputCupon.value = reserva.cupon; /* escribe cupon */
+    if (msgCupon) { msgCupon.style.color = "#15803d"; msgCupon.textContent = `✓ Cupón ${reserva.cupon} aplicado (${descuentoAplicado * 100}% de descuento).`; } /* muestra aviso */
+  } else { /* limpia cupon si no tenia */
+      descuentoAplicado = 0; /* sin descuento */
+    codigoCuponActivo = ""; /* sin codigo */
+      if (inputCupon) inputCupon.value = ""; /* limpia input */
+    if (msgCupon) msgCupon.textContent = ""; /* limpia aviso */
+  }
+
+  renderizarCheckboxesHabitaciones(); /* redibuja lista cuartos habilitando los suyos */
+    document.querySelectorAll('input[name="habitaciones"]').forEach(cb => { /* marca habitaciones reservadas */
+      cb.checked = Array.isArray(reserva.habitaciones) && reserva.habitaciones.includes(cb.value); /* activa casillas */
+    });
+
+  calcularCotizacion(); /* actualiza monto total */
+
+    const btnSubmit = form.querySelector('button[type="submit"]'); /* boton enviar */
+  if (btnSubmit) { /* actualiza texto boton */
+      if (!btnSubmit.dataset.textoOriginal) btnSubmit.dataset.textoOriginal = btnSubmit.textContent; /* respalda texto original */
+    btnSubmit.textContent = reservaEnEdicion ? "Guardar Cambios de Reservación" : btnSubmit.dataset.textoOriginal; /* cambia etiqueta boton */
+  }
+
+  mostrarAlertaFormulario( /* informa al cliente */
+      reservaEnEdicion
+        ? `Datos de tu reservación ${reserva.folio} cargados en el formulario. Modifica lo que necesites y presiona "Guardar Cambios de Reservación".`
+          : `Datos de la reservación ${reserva.folio} cargados. Como estaba cancelada, al enviarla se generará una nueva reservación.`,
+    "exito"
+  );
 }
 
 function inicializarFormularioReserva() { /* controla validaciones, cupones y envio */
@@ -399,16 +498,16 @@ function inicializarFormularioReserva() { /* controla validaciones, cupones y en
 
       let valido = true; /* bandera validacion */
 
-    if (nombre.length < 3) { marcarEstadoCampo("nombre", "err-nombre", false, "Ingresa tu nombre completo (mínimo 3 caracteres)."); valido = false; } /* valida nombre */
+    if (nombre.length < 3) { marcarEstadoCampo("nombre", "err-nombre", false, "Ingresa tu nombre completo elemplo Axel Bueno Vallejo."); valido = false; } /* valida nombre */
       else marcarEstadoCampo("nombre", "err-nombre", true); /* marca nombre valido */
 
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo)) { marcarEstadoCampo("correo", "err-correo", false, "Ingresa un correo electrónico válido."); valido = false; } /* valida correo */
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo)) { marcarEstadoCampo("correo", "err-correo", false, "Ingresa un correo electrónico válido con el formato axel@gmail.com."); valido = false; } /* valida correo */
       else marcarEstadoCampo("correo", "err-correo", true); /* marca correo valido */
 
-    if (!/^[0-9]{10}$/.test(telefono)) { marcarEstadoCampo("telefono", "err-telefono", false, "El teléfono debe tener exactamente 10 dígitos numéricos."); valido = false; } /* valida telefono */
+    if (!/^[0-9]{10}$/.test(telefono)) { marcarEstadoCampo("telefono", "err-telefono", false, "El teléfono debe tener exactamente 10 dígitos numéricos ejemplo 4778900989."); valido = false; } /* valida telefono */
       else marcarEstadoCampo("telefono", "err-telefono", true); /* marca telefono valido */
 
-    if (usuario.length < 4) { marcarEstadoCampo("usuario_huesped", "err-usuario", false, "El usuario debe tener al menos 4 caracteres."); valido = false; } /* valida usuario */
+    if (usuario.length < 4) { marcarEstadoCampo("usuario_huesped", "err-usuario", false, "El usuario debe tener al menos 4 caracteres. EJEMPLO AXEL2026.LL"); valido = false; } /* valida usuario */
       else marcarEstadoCampo("usuario_huesped", "err-usuario", true); /* marca usuario valido */
 
     if (password.length < 4) { marcarEstadoCampo("password_huesped", "err-password", false, "La contraseña debe tener al menos 4 caracteres."); valido = false; } /* valida contraseña */
@@ -464,7 +563,7 @@ function inicializarFormularioReserva() { /* controla validaciones, cupones y en
 
     calcularCotizacion(); /* muestra total inicial */
 
-  form.addEventListener("submit", async (e) => { /* guarda la reservacion en firestore */
+  form.addEventListener("submit", async (e) => { /* guarda o actualiza la reservacion en firestore */
       e.preventDefault(); /* evita recarga pagina */
     const { valido, datos } = validarCampos(); /* valida campos */
 
@@ -473,49 +572,70 @@ function inicializarFormularioReserva() { /* controla validaciones, cupones y en
           return; /* detiene proceso */
       }
 
-    const ocupadaReciente = datos.habitaciones.find(id => obtenerEstadoHabitacion(id).ocupada); /* evita reservar cuarto ya ganado */
+    const ocupadaReciente = datos.habitaciones.find(id => { /* evita reservar cuarto ganado por otro */
+        const est = obtenerEstadoHabitacion(id); /* consulta estado actual */
+      return est.ocupada && (!reservaEnEdicion || est.folio !== reservaEnEdicion.folio); /* ignora si es su misma reserva */
+    });
       if (ocupadaReciente) { /* verifica conflicto tiempo real */
         marcarEstadoHabitaciones(false, "Una de las habitaciones elegidas acaba de ser reservada. Elige otra disponible."); /* marca error cuartos */
           mostrarAlertaFormulario("Una de las habitaciones elegidas acaba de ser reservada. Por favor selecciona otra.", "error"); /* avisa conflicto */
         return; /* detiene guardado */
       }
 
+    const totalConfirmar = calcularCotizacion(); /* obtiene monto para confirmar */
+      const mensajeConfirm = reservaEnEdicion /* elige texto confirmacion */
+        ? `¿Estás seguro de guardar los cambios en la reservación ${reservaEnEdicion.folio} a nombre de ${datos.nombre} del ${datos.fechaEntrada} al ${datos.fechaLimite} por $${totalConfirmar.toLocaleString("es-MX")} MXN?`
+          : `¿Estás seguro de realizar esta reservación a nombre de ${datos.nombre} del ${datos.fechaEntrada} al ${datos.fechaLimite} por $${totalConfirmar.toLocaleString("es-MX")} MXN?`;
+    if (!confirm(mensajeConfirm)) return; /* pide confirmacion antes de enviar */
+
     const btnSubmit = form.querySelector('button[type="submit"]'); /* boton enviar */
-      const textoOriginal = btnSubmit.textContent; /* guarda texto boton */
+      if (!btnSubmit.dataset.textoOriginal) btnSubmit.dataset.textoOriginal = btnSubmit.textContent; /* guarda texto original */
     btnSubmit.disabled = true; /* bloquea doble clic */
-        btnSubmit.textContent = "Registrando reservación..."; /* muestra mensaje carga */
+        btnSubmit.textContent = reservaEnEdicion ? "Guardando cambios..." : "Registrando reservación..."; /* muestra mensaje carga */
 
     try { /* intenta subir a firestore */
         const total = calcularCotizacion(); /* saca monto final */
-      const folio = "FP-" + Math.floor(1000 + Math.random() * 9000); /* genera folio unico */
+      const editando = Boolean(reservaEnEdicion && reservaEnEdicion.docId); /* verifica si es modificacion */
+        const folio = editando ? reservaEnEdicion.folio : "FP-" + Math.floor(1000 + Math.random() * 9000); /* conserva o crea folio */
 
-        const nuevaReserva = { /* objeto reservacion nube */
+        const reservaFinal = { /* objeto reservacion nube */
           folio, /* codigo folio */
             ...datos, /* datos cliente */
           cupon: codigoCuponActivo || "Ninguno", /* cupon usado */
             total, /* precio pagado */
           estado: "Activa", /* estatus reserva */
-            creadoEn: new Date().toISOString() /* fecha registro */
+            creadoEn: editando ? reservaEnEdicion.creadoEn : new Date().toISOString() /* fecha registro */
         };
 
-      await addDoc(reservacionesRef, nuevaReserva); /* sube los datos a la nube */
-          mostrarComprobanteTicket(nuevaReserva); /* muestra ticket imprimible */
+      if (editando) { /* actualiza documento existente */
+          await updateDoc(doc(db, "reservaciones", reservaEnEdicion.docId), reservaFinal); /* guarda cambios en nube */
+      } else { /* crea documento nuevo */
+          await addDoc(reservacionesRef, reservaFinal); /* sube los datos a la nube */
+      }
 
-      form.reset(); /* limpia campos */
-          descuentoAplicado = 0; /* reinicia descuento */
+      mostrarComprobanteTicket(reservaFinal); /* muestra ticket imprimible */
+
+      reservaEnEdicion = null; /* sale de modo edicion */
+        form.reset(); /* limpia campos */
+      descuentoAplicado = 0; /* reinicia descuento */
         codigoCuponActivo = ""; /* borra cupon */
-          if (msgCupon) msgCupon.textContent = ""; /* limpia texto cupon */
+      if (msgCupon) msgCupon.textContent = ""; /* limpia texto cupon */
         limpiarEstadosVisualesFormulario(); /* quita bordes colores */
-          document.querySelectorAll('input[name="habitaciones"]').forEach(cb => cb.checked = false); /* desmarca cuartos */
+      renderizarCheckboxesHabitaciones(); /* reinicia casillas */
         calcularCotizacion(); /* reinicia cotizador */
 
-      mostrarAlertaFormulario(`¡Reservación registrada a nombre de ${datos.nombre}! Folio: ${folio}. Guarda tu usuario (${datos.usuario}) para consultar o cancelar.`, "exito"); /* muestra exito */
+      mostrarAlertaFormulario( /* muestra aviso exito */
+          editando
+            ? `¡Reservación ${folio} actualizada correctamente a nombre de ${datos.nombre}!`
+              : `¡Reservación registrada a nombre de ${datos.nombre}! Folio: ${folio}. Guarda tu usuario (${datos.usuario}) para consultar o cancelar.`,
+        "exito"
+      );
     } catch (error) { /* captura fallo conexion */
         console.error("Error al guardar en Firebase:", error); /* muestra error consola */
       mostrarAlertaFormulario("Error al conectar con la base de datos Firebase. Verifica tu conexión.", "error"); /* avisa error red */
     } finally { /* se ejecuta al final */
         btnSubmit.disabled = false; /* reactiva boton */
-      btnSubmit.textContent = textoOriginal; /* restaura texto */
+      btnSubmit.textContent = btnSubmit.dataset.textoOriginal; /* restaura texto */
     }
   });
 }
@@ -583,7 +703,12 @@ function mostrarAlertaFormulario(mensaje, tipo) { /* muestra aviso verde o rojo 
   alerta.scrollIntoView({ behavior: "smooth", block: "nearest" }); /* desplaza pantalla al aviso */
 }
 
-function inicializarConsultaHuesped() { /* busca reserva por usuario y clave */
+window.editarMiReservacion = function(folio) { /* boton manual para cargar reserva en formulario */
+  const reserva = obtenerReservaciones().find(r => r.folio === folio); /* busca reserva por folio */
+    if (reserva) cargarReservaEnFormulario(reserva); /* llena todos los campos */
+};
+
+function inicializarConsultaHuesped() { /* busca reserva y llena formulario automaticamente */
   const formConsulta = document.getElementById("form-consulta-huesped"); /* formulario consulta */
     const contenedorResultado = document.getElementById("resultado-reserva-huesped"); /* caja resultados */
   if (!formConsulta || !contenedorResultado) return; /* sale si no existen */
@@ -593,13 +718,16 @@ function inicializarConsultaHuesped() { /* busca reserva por usuario y clave */
     const user = document.getElementById("login_usuario").value.trim(); /* lee usuario escrito */
         const pass = document.getElementById("login_password").value.trim(); /* lee clave escrita */
 
-        const misReservas = obtenerReservaciones().filter(r => r.usuario === user && r.password === pass); /* filtra reservas del usuario */
+    const misReservas = obtenerReservaciones().filter(r => r.usuario === user && r.password === pass); /* filtra reservas del usuario */
 
       contenedorResultado.hidden = false; /* muestra caja de resultados */
     if (misReservas.length === 0) { /* valida si no hubo coincidencias */
         contenedorResultado.innerHTML = `<p style="color:#dc2626; font-weight:600;">Usuario o contraseña incorrectos, o no tienes reservaciones registradas.</p>`; /* avisa error acceso */
       return; /* termina busqueda */
     }
+
+    const reservaParaLlenar = misReservas.find(r => r.estado === "Activa") || misReservas[0]; /* elige reserva activa */
+      cargarReservaEnFormulario(reservaParaLlenar); /* llena automaticamente todos los campos de contacto */
 
       contenedorResultado.innerHTML = misReservas.map(res => { /* dibuja tarjetas de reservas */
         const nombresHabs = res.habitaciones.map(id => { /* traduce ids de cuartos */
@@ -609,14 +737,17 @@ function inicializarConsultaHuesped() { /* busca reserva por usuario y clave */
 
           return `
                 <article style="border-bottom: 1px solid var(--color-border); padding-bottom: 0.85rem; margin-bottom: 0.85rem;">
-                    <p><strong>Folio:</strong> ${res.folio} (${res.estado})</p>
-                    <p><strong>Huésped:</strong> ${res.nombre}</p>
-                    <p><strong>Personas:</strong> ${res.adultos ?? 1} Adulto(s), ${res.infantes ?? 0} Infante(s)</p>
-                    <p><strong>Habitaciones:</strong> ${nombresHabs}</p>
-                    <p><strong>Entrada:</strong> ${res.fechaEntrada} | <strong>Fecha Límite:</strong> ${res.fechaLimite}</p>
-                    <p><strong>Total:</strong> $${Number(res.total).toLocaleString("es-MX")} MXN</p>
+                      <p><strong>Folio:</strong> ${res.folio} (${res.estado})</p>
+                     <p><strong>Huésped:</strong> ${res.nombre}</p>
+                     <p><strong>Personas:</strong> ${res.adultos ?? 1} Adulto(s), ${res.infantes ?? 0} Infante(s)</p>
+                     <p><strong>Habitaciones:</strong> ${nombresHabs}</p>
+                     <p><strong>Entrada:</strong> ${res.fechaEntrada} | <strong>Fecha Límite:</strong> ${res.fechaLimite}</p>
+                       <p><strong>Total:</strong> $${Number(res.total).toLocaleString("es-MX")} MXN</p>
                     ${res.estado === "Activa"
-                        ? `<button type="button" class="btn-danger" onclick="cancelarReservacion('${res.folio}')">Cancelar Reservación</button>`
+                        ? `<div style="display:flex; gap:0.5rem; flex-wrap:wrap; margin-top:0.5rem;">
+                            <button type="button" class="btn-secondary" onclick="editarMiReservacion('${res.folio}')">Cargar en formulario</button>
+                            <button type="button" class="btn-danger" onclick="cancelarReservacion('${res.folio}')">Cancelar Reservación</button>
+                           </div>`
                         : `<em style="color:#991b1b;">Reservación cancelada</em>`
                     }
                 </article>
@@ -633,6 +764,11 @@ window.cancelarReservacion = async function(folio) { /* cancela reserva y libera
 
   try { /* intenta actualizar firestore */
       await updateDoc(doc(db, "reservaciones", reserva.docId), { estado: "Cancelada" }); /* marca como cancelada */
+    if (reservaEnEdicion && reservaEnEdicion.folio === folio) { /* limpia formulario si estaba cargada */
+        reservaEnEdicion = null; /* sale de edicion */
+      const form = document.getElementById("form-reservacion"); /* busca formulario */
+        if (form) form.reset(); /* vacia campos */
+    }
     alert("Reservación cancelada correctamente en Firebase. Las habitaciones han sido liberadas."); /* confirma liberacion */
   } catch (error) { /* captura fallo conexion */
       console.error("Error al cancelar en Firebase:", error); /* muestra error consola */
