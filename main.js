@@ -585,7 +585,7 @@ function inicializarFormularioReserva() { /* controla validaciones, cupones y en
     const totalConfirmar = calcularCotizacion(); /* obtiene monto para confirmar */
       const mensajeConfirm = reservaEnEdicion /* elige texto confirmacion */
         ? `¿Estás seguro de guardar los cambios en la reservación ${reservaEnEdicion.folio} a nombre de ${datos.nombre} del ${datos.fechaEntrada} al ${datos.fechaLimite} por $${totalConfirmar.toLocaleString("es-MX")} MXN?`
-          : `¿Estás seguro de realizar esta reservación a nombre de ${datos.nombre} del ${datos.fechaEntrada} al ${datos.fechaLimite} por $${totalConfirmar.toLocaleString("es-MX")} MXN?`;
+          : `RECUERDA QUE EL PAGO ES EN EFECTIVO EL FOLIO ES UN COMPROBANTE¿Estás seguro de realizar esta reservación a nombre de ${datos.nombre} del ${datos.fechaEntrada} al ${datos.fechaLimite} por $${totalConfirmar.toLocaleString("es-MX")} MXN?`;
     if (!confirm(mensajeConfirm)) return; /* pide confirmacion antes de enviar */
 
     const btnSubmit = form.querySelector('button[type="submit"]'); /* boton enviar */
@@ -627,7 +627,7 @@ function inicializarFormularioReserva() { /* controla validaciones, cupones y en
       mostrarAlertaFormulario( /* muestra aviso exito */
           editando
             ? `¡Reservación ${folio} actualizada correctamente a nombre de ${datos.nombre}!`
-              : `¡Reservación registrada a nombre de ${datos.nombre}! Folio: ${folio}. Guarda tu usuario (${datos.usuario}) para consultar o cancelar.`,
+              : `RECUERDA QUE EL PAGO ES EN FISICO ESTO ES UNA FORMA DE RESERVA DEL HOTEL PAGOS EN EFECTIVO!!!!!¡Reservación registrada a nombre de ${datos.nombre}! Folio: ${folio}. Guarda tu usuario (${datos.usuario}) para consultar o cancelar.`,
         "exito"
       );
     } catch (error) { /* captura fallo conexion */

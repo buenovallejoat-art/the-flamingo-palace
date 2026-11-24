@@ -2,12 +2,12 @@
 :root {
   --color-primary: #ea580c; /* Naranja atardecer vibrante */
       --color-primary-dark: #c2410c; /* Terracota cálido al pasar el cursor */
-  --color-sun: #f59e0b; /* Amarillo sol dorado */
+  --color-sun: #f4a215; /* Amarillo sol dorado */
     --color-sun-light: #fef3c7; /* Amarillo arena suave */
   --color-bg: #fffbeb; /* Fondo crema cálido tipo playa */
       --color-surface: #ffffff; /* Blanco limpio para tarjetas */
-  --color-text: #292524; /* Café carbón para textos */
-    --color-text-muted: #57534e; /* Gris cálido secundario */
+  --color-text: #070606; /* Café carbón para textos */
+    --color-text-muted: #0a0908; /* Gris cálido secundario */
   --color-border: #fde68a; /* Borde dorado suave */
     --font-main: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; /* Fuente principal del sistema */
   --radius-md: 8px; /* Redondeo estándar de esquinas */
