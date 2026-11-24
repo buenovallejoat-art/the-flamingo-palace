@@ -1,86 +1,98 @@
 <!DOCTYPE html> <!-- Indica al navegador que el documento usa HTML5 -->
 <html lang="es"> <!-- Etiqueta raíz del documento con idioma español -->
 <head> <!-- Cabecera con metadatos, título y enlaces a estilos -->
-       <meta charset="UTF-8"> <!-- Permite usar acentos, la ñ y caracteres especiales -->
-     <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Adapta el diseño a pantallas de celulares y tabletas -->
-      <meta name="description" content="The Flamingo Palace - Resort frente al mar en Bucerías, Nayarit. Disfruta del sol, la playa y nuestras promociones de temporada."> <!-- Descripción breve del sitio para buscadores -->
-      <title>The Flamingo Palace | Inicio</title> <!-- Título que se muestra en la pestaña del navegador -->
-      <link rel="stylesheet" href="styles.css"> <!-- Conecta el archivo externo de estilos CSS -->
+    <meta charset="UTF-8"> <!-- Permite usar acentos, la ñ y caracteres especiales -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Adapta el diseño a pantallas de celulares y tabletas -->
+    <meta name="description" content="The Flamingo Palace - Resort frente al mar en Bucerías, Nayarit. Disfruta del sol, la playa y nuestras promociones de temporada."> <!-- Descripción breve del sitio para buscadores -->
+    <title>The Flamingo Palace | Inicio</title> <!-- Título que se muestra en la pestaña del navegador -->
+    <link rel="stylesheet" href="styles.css"> <!-- Conecta el archivo externo de estilos CSS -->
 </head> <!-- Cierra la cabecera del documento -->
 <body> <!-- Inicia el contenido visible de la página web -->
     <!-- Encabezado principal del sitio -->
-      <header class="site-header"> <!-- Contenedor superior con marca y menú -->
-          <section class="header-brand"> <!-- Agrupa el título y eslogan del hotel -->
-               <h1>Bienvenido a The Flamingo Palace</h1> <!-- Título principal de la página -->
-              <p> Sol, playa y descanso frente al Pacífico en Bucerías, Nayarit</p> <!-- Subtítulo descriptivo del resort -->
-          </section> <!-- Cierra la sección de marca -->
-          <button type="button" class="menu-toggle" id="menu-toggle" aria-label="Abrir menú de navegación" aria-expanded="false"> <!-- Botón para abrir el menú en celulares -->
-            ☰ <!-- Ícono de tres líneas para el menú móvil -->
+    <header class="site-header"> <!-- Contenedor superior con marca y menú -->
+        <section class="header-brand"> <!-- Agrupa el título y eslogan del hotel -->
+            <h1>Bienvenido a The Flamingo Palace</h1> <!-- Título principal de la página -->
+            <p>Sol, playa y descanso frente al Pacífico en Bucerías, Nayarit</p> <!-- Subtítulo descriptivo del resort -->
+        </section> <!-- Cierra la sección de marca -->
+
+        <button type="button" class="menu-toggle" id="menu-toggle" aria-label="Abrir menú de navegación" aria-expanded="false"> <!-- Botón para abrir el menú en celulares -->
+            ☰ Menú <!-- Ícono y texto del botón móvil -->
         </button> <!-- Cierra el botón del menú -->
+
         <nav aria-label="Navegación principal" id="nav-drawer"> <!-- Contenedor de la barra de navegación -->
             <ul class="nav-links" id="nav-links"> <!-- Lista de enlaces principales del sitio -->
                 <li class="nav-close-item"> <!-- Elemento de lista para el botón de cerrar -->
                     <button type="button" class="menu-close" id="menu-close" aria-label="Cerrar menú">✕</button> <!-- Botón para cerrar el menú en móvil -->
-                 </li> <!-- Cierra el elemento del botón -->
+                </li> <!-- Cierra el elemento del botón -->
                 <li><a href="index.html" class="active">Inicio</a></li> <!-- Enlace a la página de inicio (página actual) -->
-                  <li><a href="servicios.html">Habitaciones (20)</a></li> <!-- Enlace al catálogo de las 20 habitaciones -->
-                  <li><a href="contacto.html">Reservar / Mi Cuenta</a></li> <!-- Enlace al formulario de reservación y consulta -->
+                <li><a href="servicios.html">Habitaciones (20)</a></li> <!-- Enlace al catálogo de las 20 habitaciones -->
+                <li><a href="contacto.html">Reservar / Mi Cuenta</a></li> <!-- Enlace al formulario de reservación y consulta -->
             </ul> <!-- Cierra la lista de enlaces -->
         </nav> <!-- Cierra la barra de navegación -->
-    </header> <!-- Cierra el encabezado principal -->     
+    </header> <!-- Cierra el encabezado principal -->
+
     <!-- Contenido principal de la página -->
     <main class="container layout-dos-columnas"> <!-- Contenedor principal organizado en dos columnas -->
-         <!-- Columna izquierda con promociones y habitaciones -->
-          <section class="panel-card" aria-labelledby="destacados-heading"> <!-- Tarjeta principal de promociones y destacados -->
-              <header class="panel-header"> <!-- Encabezado de esta sección -->
-                  <h2 id="destacados-heading">Promociones y Habitaciones Destacadas</h2> <!-- Subtítulo de la sección -->
-                  <p>Temporada Invernal &amp; Navidad — Reserva antes de finalizar noviembre con <strong>25% de descuento</strong> (Cupón: <strong>NAVIDAD25</strong>).</p> <!-- Texto de promoción con cupón NAVIDAD25 -->
-               </header> <!-- Cierra el encabezado de la sección -->
+        <!-- Columna izquierda con promociones y habitaciones -->
+        <section class="panel-card" aria-labelledby="destacados-heading"> <!-- Tarjeta principal de promociones y destacados -->
+            <header class="panel-header"> <!-- Encabezado de esta sección -->
+                <h2 id="destacados-heading">Promociones y Habitaciones Destacadas</h2> <!-- Subtítulo de la sección -->
+                <p>Temporada Invernal &amp; Navidad — Reserva antes de finalizar noviembre con <strong>25% de descuento</strong> (Cupón: <strong>NAVIDAD25</strong>).</p> <!-- Texto de promoción con cupón NAVIDAD25 -->
+            </header> <!-- Cierra el encabezado de la sección -->
+
             <!-- Primera imagen promocional -->
-              <figure class="featured-banner"> <!-- Contenedor de imagen con pie de foto -->
-                  <img src="https://tse3.mm.bing.net/th/id/OIP.7QppByLeYS29vk2rAnlYqgHaE8?r=0&rs=1&pid=ImgDetMain&o=7&rm=3" alt="Playa de arena dorada y mar tranquilo frente a Bucerías, Nayarit"> <!-- Imagen de la playa de Bucerías -->
-                 <figcaption>Playa de arena dorada y mar tranquilo frente a Bucerías, Nayarit</figcaption> <!-- Descripción debajo de la primera imagen -->
-             </figure> <!-- Cierra el contenedor de la primera imagen -->
-              <p class="promo-texto">Temporada Invernal &amp; Navidad — Reserva antes de finalizar diciembre con <strong>50% de descuento</strong> (Cupón: <strong>FLAMINGO50</strong>).</p> <!-- Texto de promoción con cupón FLAMINGO50 -->
-              <!-- Segunda imagen promocional -->
+            <figure class="featured-banner"> <!-- Contenedor de imagen con pie de foto -->
+                <img src="https://tse3.mm.bing.net/th/id/OIP.7QppByLeYS29vk2rAnlYqgHaE8?r=0&rs=1&pid=ImgDetMain&o=7&rm=3" alt="Playa de arena dorada y mar tranquilo frente a Bucerías, Nayarit"> <!-- Imagen de la playa de Bucerías -->
+                <figcaption>Playa de arena dorada y mar tranquilo frente a Bucerías, Nayarit</figcaption> <!-- Descripción debajo de la primera imagen -->
+            </figure> <!-- Cierra el contenedor de la primera imagen -->
+
+            <p class="promo-texto">Temporada Invernal &amp; Navidad — Reserva antes de finalizar diciembre con <strong>50% de descuento</strong> (Cupón: <strong>FLAMINGO50</strong>).</p> <!-- Texto de promoción con cupón FLAMINGO50 -->
+
+            <!-- Segunda imagen promocional -->
             <figure class="featured-banner"> <!-- Contenedor de la segunda imagen -->
                 <img src="https://st3.depositphotos.com/4173781/16406/i/600/depositphotos_164065102-stock-photo-santa-claus-on-the-beach.jpg" alt="Costa del Pacífico mexicano con palmeras en Bucerías, Nayarit"> <!-- Imagen temática navideña en la playa -->
                 <figcaption>Playa privada, palmeras y alberca climatizada frente al mar</figcaption> <!-- Descripción debajo de la segunda imagen -->
-              </figure> <!-- Cierra el contenedor de la segunda imagen -->
-                    <p class="promo-texto">Atardeceres inolvidables en la <strong>Bahía de Banderas, Nayarit</strong> — Experiencias todo incluido frente al océano.</p> <!-- Párrafo informativo sobre la ubicación -->
+            </figure> <!-- Cierra el contenedor de la segunda imagen -->
+
+            <p class="promo-texto">Atardeceres inolvidables en la <strong>Bahía de Banderas, Nayarit</strong> — Experiencias todo incluido frente al océano.</p> <!-- Párrafo informativo sobre la ubicación -->
+
             <!-- Tercera imagen promocional -->
-              <figure class="featured-banner"> <!-- Contenedor de la tercera imagen -->
+            <figure class="featured-banner"> <!-- Contenedor de la tercera imagen -->
                 <img src="https://likewhereyouregoing.com/wp-content/uploads/2019/02/bucerias-beach-1.jpg" alt="Atardecer dorado sobre el mar de Bucerías, Nayarit"> <!-- Imagen del atardecer en Bucerías -->
-                  <figcaption>Experiencias todo incluido y vista Maravillosa</figcaption> <!-- Descripción debajo de la tercera imagen -->
-              </figure> <!-- Cierra el contenedor de la tercera imagen -->
+                <figcaption>Experiencias todo incluido y vista Maravillosa</figcaption> <!-- Descripción debajo de la tercera imagen -->
+            </figure> <!-- Cierra el contenedor de la tercera imagen -->
+
             <!-- Cuadrícula de habitaciones destacadas -->
-                <section class="grid-catalogo-mini" aria-label="Habitaciones destacadas"> <!-- Sección que agrupa las tarjetas de habitaciones -->
-                  <article class="card"> <!-- Tarjeta de la primera habitación destacada -->
-                      <figure> <!-- Contenedor de foto y precio -->
-                          <img src="https://i.pinimg.com/736x/11/a8/63/11a86398598736e4281122c8b12acd26.jpg" alt="Habitación Estándar Arena"> <!-- Foto de la habitación 101 -->
-                          <figcaption>$1,850 MXN / noche</figcaption> <!-- Precio por noche de la habitación -->
-                      </figure> <!-- Cierra el contenedor de foto -->
-                      <h3>101. Estándar Arena</h3> <!-- Nombre de la habitación -->
-                         <p>2 camas matrimoniales, balcón con vista al jardín tropical y aire acondicionado.</p> <!-- Descripción breve de comodidades -->
-                     <a href="contacto.html?hab=101_estandar_arena#formulario" class="btn-primary">Reservar esta habitación</a> <!-- Botón que lleva al formulario preseleccionando esta habitación -->
-                  </article> <!-- Cierra la tarjeta de la habitación 101 -->
+            <section class="grid-catalogo-mini" aria-label="Habitaciones destacadas"> <!-- Sección que agrupa las tarjetas de habitaciones -->
+                <article class="card"> <!-- Tarjeta de la primera habitación destacada -->
+                    <figure> <!-- Contenedor de foto y precio -->
+                        <img src="https://i.pinimg.com/736x/11/a8/63/11a86398598736e4281122c8b12acd26.jpg" alt="Habitación Estándar Arena"> <!-- Foto de la habitación 101 -->
+                        <figcaption>$1,850 MXN / noche</figcaption> <!-- Precio por noche de la habitación -->
+                    </figure> <!-- Cierra el contenedor de foto -->
+                    <h3>101. Estándar Arena</h3> <!-- Nombre de la habitación -->
+                    <p>2 camas matrimoniales, balcón con vista al jardín tropical y aire acondicionado.</p> <!-- Descripción breve de comodidades -->
+                    <a href="contacto.html?hab=101_estandar_arena#formulario" class="btn-primary">Reservar esta habitación</a> <!-- Botón que lleva al formulario preseleccionando esta habitación -->
+                </article> <!-- Cierra la tarjeta de la habitación 101 -->
+
                 <article class="card"> <!-- Tarjeta de la segunda habitación destacada -->
-                      <figure> <!-- Contenedor de foto y precio -->
-                          <img src="https://www.temptationresortcancun.com/images/slides/slide-90.jpg" alt="Habitación El Paraíso con Hassel"> <!-- Foto de la habitación 104 -->
-                          <figcaption>$2,650 MXN / noche</figcaption> <!-- Precio por noche de la habitación -->
-                      </figure> <!-- Cierra el contenedor de foto -->
-                      <h3>104. El Paraíso con Hassel</h3> <!-- Nombre de la habitación -->
+                    <figure> <!-- Contenedor de foto y precio -->
+                        <img src="https://www.temptationresortcancun.com/images/slides/slide-90.jpg" alt="Habitación El Paraíso con Hassel"> <!-- Foto de la habitación 104 -->
+                        <figcaption>$2,650 MXN / noche</figcaption> <!-- Precio por noche de la habitación -->
+                    </figure> <!-- Cierra el contenedor de foto -->
+                    <h3>104. El Paraíso con Hassel</h3> <!-- Nombre de la habitación -->
                     <p>Cama King Size, terraza privada rodeada de palmeras y vista privilegiada al mar.</p> <!-- Descripción breve de comodidades -->
-                      <a href="contacto.html?hab=104_el_paraiso_hassel#formulario" class="btn-primary">Reservar esta habitación</a> <!-- Botón que lleva al formulario preseleccionando esta suite -->
+                    <a href="contacto.html?hab=104_el_paraiso_hassel#formulario" class="btn-primary">Reservar esta habitación</a> <!-- Botón que lleva al formulario preseleccionando esta suite -->
                 </article> <!-- Cierra la tarjeta de la habitación 104 -->
             </section> <!-- Cierra la cuadrícula de habitaciones -->
+
             <footer class="panel-footer-action"> <!-- Pie de sección con botón hacia el catálogo -->
                 <a href="servicios.html" class="btn-secondary">Ver las 20 Habitaciones y Disponibilidad &rarr;</a> <!-- Enlace para ver todas las habitaciones -->
             </footer> <!-- Cierra el pie de sección -->
+
             <!-- Sección de video turístico -->
-               <section class="video-section" aria-labelledby="video-bucerias-heading"> <!-- Contenedor del video de Bucerías -->
-                  <h3 id="video-bucerias-heading">Descubre Bucerías, Nayarit</h3> <!-- Título de la sección de video -->
-                  <p>Recorrido por nuestras playas, el mar del Pacífico y el ambiente de Bucerías.</p> <!-- Texto introductorio al video -->
+            <section class="video-section" aria-labelledby="video-bucerias-heading"> <!-- Contenedor del video de Bucerías -->
+                <h3 id="video-bucerias-heading">Descubre Bucerías, Nayarit</h3> <!-- Título de la sección de video -->
+                <p>Recorrido por nuestras playas, el mar del Pacífico y el ambiente de Bucerías.</p> <!-- Texto introductorio al video -->
                 <div class="video-responsive-wrapper"> <!-- Caja adaptable para que el video se ajuste a móviles -->
                     <!-- Marco incrustado que carga el video externo -->
                     <iframe
@@ -90,24 +102,28 @@
                         loading="lazy">
                     </iframe> <!-- Cierra el marco del video -->
                 </div> <!-- Cierra el contenedor adaptable del video -->
-             <p class="video-link-externo"> <!-- Párrafo con enlace directo al video -->
+                <p class="video-link-externo"> <!-- Párrafo con enlace directo al video -->
                     <a href="https://www.bing.com/videos/riverview/relatedvideo?q=video+de+bucerias+narait&&mid=5F752FE52CD925ADD2D65F752FE52CD925ADD2D6&churl=https%3a%2f%2fwww.youtube.com%2fchannel%2fUCrhD1O9fIp9zSG4jtYqlkog&mmscn=stvo&FORM=VRDGAR" target="_blank" rel="noopener noreferrer"> <!-- Abre el video en una pestaña nueva -->
                         Abrir video en pantalla completa &nearr; <!-- Texto del enlace externo -->
                     </a> <!-- Cierra el enlace -->
                 </p> <!-- Cierra el párrafo -->
             </section> <!-- Cierra la sección de video -->
         </section> <!-- Cierra la columna izquierda -->
+
         <!-- Columna derecha con información del hotel y redes -->
         <aside class="panel-card sidebar-about" aria-labelledby="about-heading"> <!-- Barra lateral con información institucional -->
             <header class="panel-header"> <!-- Encabezado de la barra lateral -->
                 <h2 id="about-heading">Acerca de Nosotros</h2> <!-- Título de la sección lateral -->
             </header> <!-- Cierra el encabezado -->
+
             <!-- Contenedor del logotipo circular -->
             <figure class="logo-circular-wrapper"> <!-- Centra y enmarca el logotipo -->
                 <img src="https://i.ibb.co/FbTkwz5N/IMAGEN.jpg" alt="Logo oficial de The Flamingo Palace" class="logo-circular"> <!-- Imagen del logotipo oficial del hotel -->
             </figure> <!-- Cierra el contenedor del logo -->
+
             <p>Somos <strong>The Flamingo Palace</strong>, un hotel boutique ubicado en las cálidas costas de <strong>Bucerías, Nayarit</strong>. Nos dedicamos a brindar experiencias de descanso y paquetes vacacionales frente al mar durante todo el año.</p> <!-- Párrafo de presentación del hotel -->
             <p>Contamos con 20 habitaciones exclusivas y atención digital las 24 horas para que reserves una o varias habitaciones de forma rápida y segura.</p> <!-- Párrafo sobre capacidad y servicio -->
+
             <section class="stats-list" aria-label="Indicadores del hotel"> <!-- Sección de barras de estadísticas en vivo -->
                 <article class="stat-item"> <!-- Indicador de habitaciones libres -->
                     <header class="stat-label"> <!-- Etiqueta superior del indicador -->
@@ -132,6 +148,7 @@
                     </header> <!-- Cierra la etiqueta -->
                     <progress value="95" max="100">95%</progress> <!-- Barra de progreso al 95% -->
                 </article> <!-- Cierra el indicador de clima -->
+
                 <!-- Primer acordeón desplegable -->
                 <details class="acordeon-info"> <!-- Caja desplegable para el menú del restaurante -->
                     <summary>Menú de Comida y Restaurante Frente al Mar</summary> <!-- Título visible en el que se hace clic -->
@@ -141,6 +158,7 @@
                     </div> <!-- Cierra el contenido desplegable -->
                 </details> <!-- Cierra el primer acordeón -->
             </section> <!-- Cierra la sección de estadísticas -->
+
             <section class="social-box" aria-label="Información adicional y redes sociales"> <!-- Sección de políticas y botones sociales -->
                 <!-- Segundo acordeón desplegable -->
                 <details class="acordeon-info"> <!-- Caja desplegable para servicios incluidos -->
@@ -149,6 +167,7 @@
                         <p>Alberca climatizada frente al mar, Wi-Fi de alta velocidad, estacionamiento privado, club de playa y atención personalizada 24/7.</p> <!-- Lista de amenidades incluidas -->
                     </div> <!-- Cierra el contenido -->
                 </details> <!-- Cierra el segundo acordeón -->
+
                 <!-- Tercer acordeón desplegable -->
                 <details class="acordeon-info"> <!-- Caja desplegable para horarios y cancelaciones -->
                     <summary>Horarios de Check-in y Políticas</summary> <!-- Título visible del acordeón -->
@@ -156,13 +175,14 @@
                         <p><strong>Check-in:</strong> 3:00 PM | <strong>Check-out (Fecha límite):</strong> 12:00 PM. Puedes cancelar tu reservación con tu usuario y contraseña.</p> <!-- Detalles de entrada, salida y cancelación -->
                     </div> <!-- Cierra el contenido -->
                 </details> <!-- Cierra el tercer acordeón -->
+
                 <h3 style="margin-top: 1.25rem;">Síguenos en Redes Sociales</h3> <!-- Subtítulo para los botones de redes -->
                 <nav class="social-links"> <!-- Contenedor de botones de redes sociales -->
                     <a href="https://www.instagram.com/theflamingopalace/" target="_blank" rel="noopener noreferrer" class="social-btn instagram" aria-label="Visitar Instagram de The Flamingo Palace"> <!-- Botón con enlace a Instagram -->
                         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"> <!-- Ícono vectorial de Instagram -->
-                                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect> <!-- Marco cuadrado redondeado del ícono -->
-                             <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path> <!-- Lente circular central del ícono -->
-                             <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line> <!-- Punto del flash del ícono -->
+                            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect> <!-- Marco cuadrado redondeado del ícono -->
+                            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path> <!-- Lente circular central del ícono -->
+                            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line> <!-- Punto del flash del ícono -->
                         </svg> <!-- Cierra el ícono SVG -->
                         <span>Instagram</span> <!-- Texto del botón -->
                     </a> <!-- Cierra el enlace de Instagram -->
@@ -176,18 +196,20 @@
             </section> <!-- Cierra la caja social -->
         </aside> <!-- Cierra la columna derecha -->
     </main> <!-- Cierra el contenido principal -->
+
     <!-- Pie de página del sitio -->
     <footer class="site-footer"> <!-- Contenedor inferior de todo el sitio -->
         <section> <!-- Columna izquierda del pie de página -->
-             <h3>The Flamingo Palace</h3> <!-- Nombre del hotel -->
-             <p>Av. Pacífico #104, Bucerías, Nayarit, México.</p> <!-- Dirección física del hotel -->
+            <h3>The Flamingo Palace</h3> <!-- Nombre del hotel -->
+            <p>Av. Pacífico #104, Bucerías, Nayarit, México.</p> <!-- Dirección física del establecimiento -->
         </section> <!-- Cierra la primera sección del pie -->
+
         <nav class="footer-social" aria-label="Redes sociales en pie de página"> <!-- Íconos de redes sociales en el pie -->
             <a href="https://www.instagram.com/theflamingopalace/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"> <!-- Enlace a Instagram en nueva pestaña -->
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> <!-- Ícono SVG de Instagram -->
-                     <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect> <!-- Borde de la cámara -->
-                     <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path> <!-- Círculo interior -->
-                     <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line> <!-- Punto superior derecho -->
+                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect> <!-- Borde de la cámara -->
+                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path> <!-- Círculo interior -->
+                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line> <!-- Punto superior derecho -->
                 </svg> <!-- Cierra el ícono SVG -->
             </a> <!-- Cierra el enlace de Instagram -->
             <a href="https://www.facebook.com/profile.php?id=61573417950971&sk=about&locale=es_LA" target="_blank" rel="noopener noreferrer" aria-label="Facebook"> <!-- Enlace directo a la página de Facebook del hotel -->
@@ -196,16 +218,15 @@
                 </svg> <!-- Cierra el ícono SVG -->
             </a> <!-- Cierra el enlace de Facebook -->
         </nav> <!-- Cierra los íconos sociales del pie -->
-        <section> <!-- Columna derecha del pie de página -->
-            <p>&copy; 2026 The Flamingo Palace. Todos los derechos reservados.</p>
 
-            <!-- Aviso de derechos de autor -->
+        <section> <!-- Columna derecha del pie de página -->
+            <p>&copy; 2026 The Flamingo Palace. Todos los derechos reservados.</p> <!-- Aviso de derechos de autor -->
             <p>Trabajo escolar CBTis 225. León, Gto., México.</p>
             <p>Bueno Vallejo Axel Tadeo</p>
-            <p>Hassel Alexader Chavez Medina.</p>
-             <!-- Créditos académicos del proyecto -->
+            <p>Hassel Alexader Chavez Medina.</p> <!-- Créditos académicos del proyecto -->
         </section> <!-- Cierra la última sección del pie -->
     </footer> <!-- Cierra el pie de página -->
+
     <script type="module" src="main.js"></script> <!-- Carga el archivo JavaScript principal como módulo -->
 </body> <!-- Cierra el cuerpo de la página -->
 </html> <!-- Cierra el documento HTML -->
