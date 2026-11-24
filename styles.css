@@ -657,11 +657,3 @@ progress::-webkit-progress-value { background: linear-gradient(90deg, var(--colo
     #area-impresion-ticket, #area-impresion-ticket * { visibility: visible; } /* Muestra únicamente el comprobante */
   #area-impresion-ticket { position: absolute; left: 0; top: 0; width: 100%; } /* Ajusta el ticket arriba a la izquierda */
 }
-
-.badge-estrellas {
-    text-align: center; /* Centra el texto y las estrellas debajo del logo */
-    font-weight: 700; /* Resalta la categoría del hotel */
-    color: #c2410c; /* Tono naranja quemado acorde a la identidad de The Flamingo Palace */
-    letter-spacing: 0.04em; /* Separa ligeramente las estrellas y letras para mejor lectura */
-    margin: 0.5rem 0 0.85rem; /* Da aire entre el logo circular y el párrafo de presentación */
-}
