@@ -1,10 +1,10 @@
 <!DOCTYPE html> <!-- Indica al navegador que el documento usa HTML5 -->
 <html lang="es"> <!-- Etiqueta raíz del documento en idioma español -->
 <head> <!-- Cabecera con configuración, título y estilos -->
-    <meta charset="UTF-8"> <!-- Permite mostrar acentos, la ñ y caracteres especiales -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Adapta el diseño a pantallas de celulares y tabletas -->
+     <meta charset="UTF-8"> <!-- Permite mostrar acentos, la ñ y caracteres especiales -->
+     <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Adapta el diseño a pantallas de celulares y tabletas -->
     <meta name="description" content="Panel administrativo privado de control de habitaciones - The Flamingo Palace."> <!-- Descripción breve del panel administrativo -->
-    <title>The Flamingo Palace | Sistema Interno Empresa</title> <!-- Título que aparece en la pestaña del navegador -->
+     <title>The Flamingo Palace | Sistema Interno Empresa</title> <!-- Título que aparece en la pestaña del navegador -->
     <link rel="stylesheet" href="styles.css"> <!-- Enlaza la hoja de estilos CSS del sitio -->
 </head> <!-- Cierra la cabecera del documento -->
 <body> <!-- Inicia el contenido visible de la página -->
@@ -13,144 +13,124 @@
             <h1>Sistema Interno — The Flamingo Palace</h1> <!-- Título principal del panel administrativo -->
             <p>Panel exclusivo de administración de las 20 habitaciones, fechas límite y reservaciones</p> <!-- Subtítulo explicativo del panel -->
         </section> <!-- Cierra la sección de marca -->
-
         <nav aria-label="Navegación administrativa"> <!-- Menú de navegación del administrador -->
             <ul class="nav-links" style="display: flex; position: static; height: auto; width: auto; background: transparent; box-shadow: none; padding: 0;"> <!-- Lista horizontal con estilos en línea para el enlace -->
                 <li><a href="index.html" target="_blank" rel="noopener noreferrer">Abrir Sitio Público &nearr;</a></li> <!-- Abre la página principal del hotel en pestaña nueva -->
             </ul> <!-- Cierra la lista de navegación -->
         </nav> <!-- Cierra el menú administrativo -->
     </header> <!-- Cierra el encabezado superior -->
-
     <main class="container"> <!-- Contenedor principal del contenido de administración -->
         <section id="admin-login-box" class="form-wrapper panel-card"> <!-- Caja del formulario de inicio de sesión -->
             <header class="panel-header"> <!-- Encabezado de la caja de acceso -->
-                <h2>Acceso Administrativo</h2> <!-- Subtítulo del formulario de ingreso -->
+                 <h2>Acceso Administrativo</h2> <!-- Subtítulo del formulario de ingreso -->
                 <p>Ingresa las credenciales del personal autorizado de The Flamingo Palace.</p> <!-- Instrucción para el personal autorizado -->
             </header> <!-- Cierra el encabezado de acceso -->
             <figure style="text-align: center; margin:0 auto 1rem auto;">
     <img src="https://i.ibb.co/FbTkwz5N/IMAGEN.jpg" alt="Logo The Flamingo Palace" style="width: 140px; height: 140px; border-radius: 50%; object-fit: cover; border: 3px solid #ea580c; box-shadow: 0 4px 12px rgba(234, 88, 12, 0.25);">
 </figure>
-
             <form id="form-admin-login" class="booking-form"> <!-- Formulario validado por JavaScript para entrar al panel -->
-                <label for="admin_user">Usuario Empresa *</label> <!-- Etiqueta del campo de usuario -->
-                <input type="text" id="admin_user" placeholder="admin" required> <!-- Campo obligatorio para escribir el usuario -->
-
-                <label for="admin_pass">Contraseña Empresa *</label> <!-- Etiqueta del campo de contraseña -->
-                <input type="password" id="admin_pass" placeholder="••••••••" required> <!-- Campo obligatorio que oculta los caracteres escritos -->
-
+         <label for="admin_user">Usuario Empresa *</label> <!-- Etiqueta del campo de usuario -->
+              <input type="text" id="admin_user" placeholder="admin" required> <!-- Campo obligatorio para escribir el usuario -->
+         <label for="admin_pass">Contraseña Empresa *</label> <!-- Etiqueta del campo de contraseña -->
+            <input type="password" id="admin_pass" placeholder="••••••••" required> <!-- Campo obligatorio que oculta los caracteres escritos -->
                 <small class="helper-text" style="display:block; margin-top:0.5rem;"> <!-- Texto de ayuda con las credenciales de prueba -->
                     Credenciales de acceso: Usuario <strong>admin</strong> | Contraseña <strong>flamingo2026</strong> <!-- Muestra el usuario y contraseña válidos -->
                 </small> <!-- Cierra el texto de ayuda -->
-
                 <button type="submit" class="btn-primary btn-block" style="margin-top: 1rem;">Ingresar al Panel</button> <!-- Botón que envía el formulario para validar acceso -->
             </form> <!-- Cierra el formulario de inicio de sesión -->
         </section> <!-- Cierra la caja de inicio de sesión -->
-
         <section id="admin-dashboard" class="panel-card" hidden> <!-- Panel principal oculto hasta iniciar sesión -->
             <header class="panel-header admin-top-bar"> <!-- Barra superior del panel administrativo -->
                 <section> <!-- Agrupa el título y descripción del tablero -->
-                    <h2>Control General de Habitaciones y Base de Datos</h2> <!-- Título del tablero de control -->
-                    <p>Monitorea las 20 habitaciones en tiempo real y libera estancias.</p> <!-- Descripción de funciones del tablero -->
-                </section> <!-- Cierra el grupo de títulos -->
+                <h2>Control General de Habitaciones y Base de Datos</h2> <!-- Título del tablero de control -->
+               <p>Monitorea las 20 habitaciones en tiempo real, registra pagos en recepción y libera estancias.</p> <!-- Descripción de funciones del tablero -->
+               </section> <!-- Cierra el grupo de títulos -->
                 <button type="button" id="btn-cerrar-admin" class="btn-secondary">Cerrar Sesión</button> <!-- Botón para salir y ocultar el panel -->
             </header> <!-- Cierra la barra superior -->
 
-            <section class="grid-catalogo-mini" style="margin-bottom: 1.5rem;"> <!-- Cuadrícula con dos tarjetas de resumen -->
-                <article class="card" style="padding: 1rem;"> <!-- Primera tarjeta: ocupación general -->
+     <section class="grid-catalogo-mini" style="margin-bottom: 1.5rem;"> <!-- Cuadrícula con dos tarjetas de resumen -->            <article class="card" style="padding: 1rem;"> <!-- Primera tarjeta: ocupación general -->
                     <h3>Estado de Ocupación (20 Habitaciones)</h3> <!-- Título de la tarjeta de ocupación -->
-                    <p id="admin-resumen-ocupacion" class="precio">0 Ocupadas / 20 Libres (0%)</p> <!-- Texto que JavaScript actualiza con la ocupación real -->
-                    <progress id="admin-barra-ocupacion" value="0" max="20" style="width: 100%; margin-top: 0.5rem;">0</progress> <!-- Barra visual del total de habitaciones ocupadas -->
-                </article> <!-- Cierra la tarjeta de ocupación -->
+              <p id="admin-resumen-ocupacion" class="precio">0 Ocupadas / 20 Libres (0%)</p> <!-- Texto que JavaScript actualiza con la ocupación real -->
+                <progress id="admin-barra-ocupacion" value="0" max="20" style="width: 100%; margin-top: 0.5rem;">0</progress> <!-- Barra visual del total de habitaciones ocupadas -->
+            </article> <!-- Cierra la tarjeta de ocupación -->
                 <article class="card" style="padding: 1rem;"> <!-- Segunda tarjeta: ingresos totales -->
-                    <h3>Ingresos por Reservaciones Activas</h3> <!-- Título de la tarjeta de ingresos -->
-                    <p id="admin-resumen-ingresos" class="precio">$0 MXN</p> <!-- Suma total en pesos calculada desde Firebase -->
-                    <small style="color: #57534e;">Sincronizado en vivo con Cloud Firestore</small> <!-- Indica conexión en tiempo real con Firebase -->
+                                        <h3>Ingresos por Reservaciones (Activas y Pagadas)</h3> <!-- Título de la tarjeta de ingresos -->
+                    <p id="admin-resumen-ingresos" class="precio">$0 MXN</p> <!-- Suma total en pesos calculada desde Supabase -->
+                     <small style="color: #57534e;">Sincronizado en vivo con Supabase PostgreSQL</small> <!-- Indica conexión en tiempo real con Supabase -->
                 </article> <!-- Cierra la tarjeta de ingresos -->
             </section> <!-- Cierra la cuadrícula de resumen -->
+
+            <div id="admin-recibo-pago" hidden style="margin-bottom: 1.5rem;"></div> <!-- Contenedor dinámico donde aparece el recibo oficial al cobrar una reservación -->
 
             <h3 style="color: var(--color-primary-dark); margin-bottom: 0.75rem;">1. Estado Actual de las 20 Habitaciones</h3> <!-- Subtítulo de la primera tabla -->
             <section class="table-responsive"> <!-- Contenedor con desplazamiento horizontal para pantallas chicas -->
                 <table class="tabla-admin"> <!-- Tabla que muestra las 20 habitaciones -->
                     <thead> <!-- Encabezado de columnas de la tabla -->
                         <tr> <!-- Fila de títulos de columna -->
-                            <th>Habitación</th> <!-- Columna del número y nombre de habitación -->
-                            <th>Tarifa / Noche</th> <!-- Columna del precio por noche -->
-                            <th>Estado</th> <!-- Columna que indica si está libre u ocupada -->
+                              <th>Habitación</th> <!-- Columna del número y nombre de habitación -->
+                             <th>Tarifa / Noche</th> <!-- Columna del precio por noche -->
+                             <th>Estado</th> <!-- Columna que indica si está libre u ocupada -->
                             <th>Huésped</th> <!-- Columna con el nombre del cliente actual -->
-                            <th>Se desocupa el (Fecha Límite)</th> <!-- Columna con la fecha de salida -->
-                            <th>Acción</th> <!-- Columna para el botón de liberar habitación -->
+                             <th>Se desocupa el (Fecha Límite)</th> <!-- Columna con la fecha de salida -->
+                            <th>Acción</th> <!-- Columna para los botones de cobrar pago o liberar habitación -->
                         </tr> <!-- Cierra la fila de encabezados -->
                     </thead> <!-- Cierra la cabecera de la tabla -->
                     <tbody id="tabla-estado-habitaciones"></tbody> <!-- Cuerpo vacío que JavaScript llena automáticamente -->
                 </table> <!-- Cierra la tabla de habitaciones -->
             </section> <!-- Cierra el contenedor adaptable de la tabla -->
-
-            <h3 style="color: var(--color-primary-dark); margin: 2rem 0 0.75rem;">2. Historial de Reservaciones Registradas</h3> <!-- Subtítulo de la segunda tabla -->
-
-            <section style="display: flex; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1rem;"> <!-- Barra de búsqueda y filtro de estatus -->
-                <!-- Campo de texto para buscar reservaciones en tiempo real -->
+             <h3 style="color: var(--color-primary-dark); margin: 2rem 0 0.75rem;">2. Historial de Reservaciones Registradas</h3> <!-- Subtítulo de la segunda tabla -->
+              <section style="display: flex; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1rem;"> <!-- Barra de búsqueda y filtro de estatus -->
+                 <!-- Campo de texto para buscar reservaciones en tiempo real -->
                 <input
                     type="search"
-                    id="admin-buscador-reservas"
-                    placeholder="Buscar por folio (FP-...), huésped, usuario o habitación..."
+                      id="admin-buscador-reservas"
+                placeholder="Buscar por folio (FP-...), huésped, usuario o habitación..."
                     aria-label="Buscar reservación"
                     style="flex: 1 1 260px; padding: 0.65rem 0.9rem; border: 1.5px solid var(--color-border); border-radius: 8px; font-family: inherit;"
                 >
                 <!-- Lista desplegable para filtrar por estado de reserva -->
                 <select
                     id="admin-filtro-estatus"
-                    aria-label="Filtrar por estatus"
+                     aria-label="Filtrar por estatus"
                     style="padding: 0.65rem 0.9rem; border: 1.5px solid var(--color-border); border-radius: 8px; font-family: inherit; background: #fff;"
                 >
-                    <option value="Todas">Todas las reservaciones</option> <!-- Muestra todas las reservaciones sin filtrar -->
-                    <option value="Activa">Solo Activas</option> <!-- Muestra únicamente las reservaciones vigentes -->
+                     <option value="Todas">Todas las reservaciones</option> <!-- Muestra todas las reservaciones sin filtrar -->
+                    <option value="Activa">Solo Activas (Pendientes de Pago)</option> <!-- Muestra únicamente las reservaciones pendientes de pago -->
+                    <option value="Pagada">Solo Pagadas (Cobradas en Caja)</option> <!-- Muestra únicamente las reservaciones ya cobradas -->
                     <option value="Cancelada">Solo Canceladas</option> <!-- Muestra únicamente las reservaciones canceladas -->
                 </select> <!-- Cierra la lista desplegable -->
             </section> <!-- Cierra la barra de búsqueda y filtro -->
-
             <section class="table-responsive"> <!-- Contenedor adaptable para la tabla de historial -->
                 <table class="tabla-admin"> <!-- Tabla con el registro histórico de reservas -->
                     <thead> <!-- Encabezado de columnas del historial -->
                         <tr> <!-- Fila de títulos de columna -->
-                            <th>Folio</th> <!-- Columna del código único de reservación -->
-                            <th>Huésped (Usuario / Personas)</th> <!-- Columna con datos del cliente y huéspedes -->
-                            <th>Habitaciones Reservadas</th> <!-- Columna con las habitaciones incluidas -->
-                            <th>Check-in &rarr; Fecha Límite</th> <!-- Columna con fechas de entrada y salida -->
-                            <th>Total</th> <!-- Columna con el monto total pagado -->
-                            <th>Estatus</th> <!-- Columna que indica si está Activa o Cancelada -->
-                            <th>Control</th> <!-- Columna con botones para cancelar o reactivar -->
-                        </tr> <!-- Cierra la fila de encabezados -->
-                    </thead> <!-- Cierra la cabecera de la tabla -->
-                    <tbody id="tabla-reservaciones-admin"></tbody> <!-- Cuerpo vacío que JavaScript llena desde Firestore -->
-                </table> <!-- Cierra la tabla del historial -->
+                             <th>Folio</th> <!-- Columna del código único de reservación -->
+                             <th>Huésped (Usuario / Personas)</th> <!-- Columna con datos del cliente y huéspedes -->
+                             <th>Habitaciones Reservadas</th> <!-- Columna con las habitaciones incluidas -->
+                                              <th>Check-in &rarr; Fecha Límite</th> <!-- Columna con fechas de entrada y salida -->
+                             <th>Total</th> <!-- Columna con el monto total pagado -->
+                             <th>Estatus</th> <!-- Columna que indica si está Activa, Pagada o Cancelada -->
+                             <th>Control</th> <!-- Columna con botones para cobrar pago o cancelar -->
+                         </tr> <!-- Cierra la fila de encabezados -->
+                     </thead> <!-- Cierra la cabecera de la tabla -->
+                      <tbody id="tabla-reservaciones-admin"></tbody> <!-- Cuerpo vacío que JavaScript llena desde Supabase -->
+                  </table> <!-- Cierra la tabla del historial -->
             </section> <!-- Cierra el contenedor adaptable -->
         </section> <!-- Cierra el panel administrativo -->
     </main> <!-- Cierra el contenedor principal -->
-
     <footer class="site-footer"> <!-- Pie de página del sistema interno -->
         <section> <!-- Columna izquierda del pie de página -->
             <h3>The Flamingo Palace</h3> <!-- Nombre del hotel -->
-            <p>Av. Pacífico #104, Bucerías, Nayarit, México.</p> <!-- Dirección del establecimiento -->
-        </section> <!-- Cierra la columna izquierda -->
+      <p>Av. Pacífico #104, Bucerías, Nayarit, México.</p> <!-- Dirección del establecimiento -->
+         </section> <!-- Cierra la columna izquierda -->
         <section> <!-- Columna derecha del pie de página -->
             <p>&copy; 2026 The Flamingo Palace. Sistema de Control Interno.</p>
              <!-- Aviso de derechos y uso interno -->
-              <p> Tabajo escolar de alumnos del cbtis 225 Leon GTO Mexico.</p>
-               <p> Tabajo escolar de alumnos del cbtis 225 Leon GTO Mexico.</p>
-             <p>Bueno Vallejo Axel Tadeo</p>
-            <p>Hassel Alexader Chavez Medina.</p>
+                <p> Tabajo escolar de alumnos del cbtis 225 Leon GTO Mexico.</p>
+               <p>Bueno Vallejo Axel Tadeo</p>
+              <p>Hassel Alexader Chavez Medina.</p>
         </section> <!-- Cierra la columna derecha -->
     </footer> <!-- Cierra el pie de página -->
-
     <script type="module" src="main.js"></script> <!-- Carga el archivo JavaScript principal como módulo -->
 </body> <!-- Cierra el cuerpo visible de la página -->
 </html> <!-- Cierra el documento HTML -->
-
-
-
-
-
-
-
-
-
