@@ -1,128 +1,106 @@
 <!DOCTYPE html> <!-- Indica al navegador que el documento usa HTML5 -->
 <html lang="es"> <!-- Etiqueta raíz del documento en idioma español -->
 <head> <!-- Cabecera con configuración, título y estilos -->
-    <meta charset="UTF-8"> <!-- Permite mostrar acentos, la ñ y caracteres especiales -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Adapta el diseño a celulares y tabletas -->
-    <meta name="description" content="Formulario de registro, reservación múltiple y gestión de cuenta - The Flamingo Palace."> <!-- Descripción breve de la página para buscadores -->
-    <title>The Flamingo Palace | Reservaciones y Mi Cuenta</title> <!-- Título que aparece en la pestaña del navegador -->
-    <link rel="stylesheet" href="styles.css"> <!-- Enlaza la hoja de estilos CSS externa -->
+ <meta charset="UTF-8"> <!-- Permite mostrar acentos, la ñ y caracteres especiales -->
+   <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Adapta el diseño a celulares y tabletas -->
+ <meta name="description" content="Formulario de registro, reservación múltiple y gestión de cuenta - The Flamingo Palace."> <!-- Descripción breve de la página para buscadores -->
+ <title>The Flamingo Palace | Reservaciones y Mi Cuenta</title> <!-- Título que aparece en la pestaña del navegador -->
+ <link rel="stylesheet" href="styles.css"> <!-- Enlaza la hoja de estilos CSS externa -->
 </head> <!-- Cierra la cabecera del documento -->
 <body> <!-- Inicia el contenido visible de la página -->
     <header class="site-header"> <!-- Encabezado superior del sitio -->
-        <section class="header-brand"> <!-- Agrupa el título y subtítulo de la página -->
-            <h1>Reservaciones y Gestión de Cuenta</h1> <!-- Título principal de esta sección -->
-            <p>Reserva una o más de nuestras 20 habitaciones y administra tu estancia frente al mar</p> <!-- Subtítulo explicativo para el huésped -->
+                <section class="header-brand"> <!-- Agrupa el título y subtítulo de la página -->
+        <h1>Reservaciones y Gestión de Cuenta</h1> <!-- Título principal de esta sección -->
+        <p>Reserva una o más de nuestras 20 habitaciones y administra tu estancia frente al mar</p> <!-- Subtítulo explicativo para el huésped -->
         </section> <!-- Cierra la sección de marca -->
-
         <button type="button" class="menu-toggle" id="menu-toggle" aria-label="Abrir menú de navegación" aria-expanded="false"> <!-- Botón para abrir el menú en celulares -->
             ☰ Menú <!-- Ícono y texto del botón móvil -->
         </button> <!-- Cierra el botón del menú -->
-
         <nav aria-label="Navegación principal" id="nav-drawer"> <!-- Barra de navegación principal -->
             <ul class="nav-links" id="nav-links"> <!-- Lista de enlaces del menú -->
                 <li class="nav-close-item"> <!-- Elemento que contiene el botón de cerrar -->
-                    <button type="button" class="menu-close" id="menu-close" aria-label="Cerrar menú">✕</button> <!-- Botón para cerrar el menú en móvil -->
-                </li> <!-- Cierra el elemento del botón -->
+           <button type="button" class="menu-close" id="menu-close" aria-label="Cerrar menú">✕</button> <!-- Botón para cerrar el menú en móvil -->                </li> <!-- Cierra el elemento del botón -->
                 <li><a href="index.html">Inicio</a></li> <!-- Enlace hacia la página de inicio -->
-                <li><a href="servicios.html">Habitaciones (20)</a></li> <!-- Enlace hacia el catálogo de 20 habitaciones -->
-                <li><a href="contacto.html" class="active">Reservar / Mi Cuenta</a></li> <!-- Enlace activo de la página actual -->
+            <li><a href="servicios.html">Habitaciones (20)</a></li> <!-- Enlace hacia el catálogo de 20 habitaciones -->
+             <li><a href="contacto.html" class="active">Reservar / Mi Cuenta</a></li> <!-- Enlace activo de la página actual -->
+                <li><button type="button" id="btn-cerrar-huesped-header" class="btn-danger" hidden>Cerrar Sesión</button></li> <!-- Botón en cabecera que cierra la sesión y limpia formularios -->
             </ul> <!-- Cierra la lista de navegación -->
         </nav> <!-- Cierra la barra de navegación -->
     </header> <!-- Cierra el encabezado superior -->
-
     <main class="container layout-dos-columnas" id="formulario"> <!-- Contenedor principal dividido en dos columnas -->
         <section class="panel-card" aria-label="Formulario de reservación"> <!-- Columna izquierda con el formulario de reserva -->
-            <header class="panel-header"> <!-- Encabezado del formulario -->
-                <h2>Nueva Reservación (1 o más habitaciones)</h2> <!-- Subtítulo de la sección de reserva -->
-                <p>Selecciona tus habitaciones disponibles, fechas de entrada y salida, y crea tu usuario para consultar o cancelar después.</p> 
-                <p>RECUERDA QUE SOLO SE RESERVA SE PAGA EN EFECTIVO LLEGANDO AL HOTEL.!!!!!</p>
+         <header class="panel-header"> <!-- Encabezado del formulario -->
+                 <h2>Nueva Reservación (1 o más habitaciones)</h2> <!-- Subtítulo de la sección de reserva -->
+         <p>Selecciona tus habitaciones disponibles, fechas de entrada y salida, y crea tu usuario para consultar o cancelar después.</p> 
+          <p>RECUERDA QUE SOLO SE RESERVA SE PAGA EN EFECTIVO LLEGANDO AL HOTEL.!!!!!</p>
                 <!-- Instrucciones generales para llenar el formulario -->
             </header> <!-- Cierra el encabezado del formulario -->
-
             <output id="alerta-formulario" class="alerta-box" hidden></output> <!-- Caja oculta para alertas de éxito o error -->
-            <section id="ticket-confirmacion" hidden></section> <!-- Sección oculta donde se genera el comprobante final -->
-
-            <form id="form-reservacion" class="booking-form" novalidate> <!-- Formulario validado mediante JavaScript -->
+              <section id="ticket-confirmacion" hidden></section> <!-- Sección oculta donde se genera el comprobante final -->
+             <form id="form-reservacion" class="booking-form" novalidate> <!-- Formulario validado mediante JavaScript -->
                 <fieldset> <!-- Primer grupo de campos: datos personales -->
                     <legend>1. Datos y Acceso del Huésped</legend> <!-- Título del primer bloque de datos -->
-
-                    <label for="nombre">Nombre Completo *</label> <!-- Etiqueta del campo de nombre -->
-                    <input type="text" id="nombre" name="nombre" placeholder="Ej.Axel Tadeo Bueno Vallejo" required minlength="3" maxlength="80"> <!-- Campo obligatorio para el nombre completo -->
+                      <label for="nombre">Nombre Completo *</label> <!-- Etiqueta del campo de nombre -->
+                      <input type="text" id="nombre" name="nombre" placeholder="Ej.Axel Tadeo Bueno Vallejo" required minlength="3" maxlength="80"> <!-- Campo obligatorio para el nombre completo -->
                     <small class="error-msg" id="err-nombre"></small> <!-- Mensaje de error si el nombre es inválido -->
-
                     <label for="correo">Correo Electrónico *</label> <!-- Etiqueta del campo de correo -->
-                    <input type="email" id="correo" name="correo" placeholder="ejemplo@correo.com" required> <!-- Campo obligatorio para correo electrónico válido -->
+                     <input type="email" id="correo" name="correo" placeholder="ejemplo@correo.com" required> <!-- Campo obligatorio para correo electrónico válido -->
                     <small class="error-msg" id="err-correo"></small> <!-- Mensaje de error para correo inválido -->
-
-                    <label for="telefono">Teléfono de Contacto (10 dígitos) *</label> <!-- Etiqueta del campo de teléfono -->
-                    <input type="tel" id="telefono" name="telefono" placeholder="4778909899" pattern="[0-9]{10}" required> <!-- Campo numérico obligatorio de 10 dígitos -->
+                     <label for="telefono">Teléfono de Contacto (10 dígitos) *</label> <!-- Etiqueta del campo de teléfono -->
+                     <input type="tel" id="telefono" name="telefono" placeholder="4778909899" pattern="[0-9]{10}" required> <!-- Campo numérico obligatorio de 10 dígitos -->
                     <small class="error-msg" id="err-telefono"></small> <!-- Mensaje de error si faltan dígitos -->
-
-                    <label for="usuario_huesped">Crea tu Nombre de Usuario *</label> <!-- Etiqueta para crear usuario personal -->
-                    <input type="text" id="usuario_huesped" name="usuario_huesped" placeholder="Ej. buenovallejo2025" required minlength="4" maxlength="25"> <!-- Campo obligatorio para el nombre de usuario -->
-                    <small class="error-msg" id="err-usuario"></small> <!-- Mensaje de error si el usuario no cumple reglas -->
-
+                     <label for="usuario_huesped">Crea tu Nombre de Usuario *</label> <!-- Etiqueta para crear usuario personal -->
+                     <input type="text" id="usuario_huesped" name="usuario_huesped" placeholder="Ej. buenovallejo2025" required minlength="4" maxlength="25"> <!-- Campo obligatorio para el nombre de usuario -->
+                     <small class="error-msg" id="err-usuario"></small> <!-- Mensaje de error si el usuario no cumple reglas -->
                     <label for="password_huesped">Crea tu Contraseña (mínimo 4 caracteres) *</label> <!-- Etiqueta para crear contraseña -->
-                    <input type="password" id="password_huesped" name="password_huesped" placeholder="••••••" required minlength="4"> <!-- Campo obligatorio que oculta la contraseña -->
-                    <small class="error-msg" id="err-password"></small> <!-- Mensaje de error si la contraseña es corta -->
+                     <input type="password" id="password_huesped" name="password_huesped" placeholder="••••••" required minlength="4"> <!-- Campo obligatorio que oculta la contraseña -->
+                     <small class="error-msg" id="err-password"></small> <!-- Mensaje de error si la contraseña es corta -->
                 </fieldset> <!-- Cierra el primer grupo de campos -->
-
                 <fieldset> <!-- Segundo grupo de campos: habitaciones -->
                     <legend>2. Selección Múltiple de Habitaciones (20 disponibles en catálogo) *</legend> <!-- Título del bloque de selección de cuartos -->
-                    <p class="helper-text">Marca una o varias habitaciones libres. Las ocupadas muestran hasta qué fecha se desocupan.</p> <!-- Texto de ayuda sobre disponibilidad -->
-
-                    <section id="lista-checkbox-habitaciones" class="checkbox-grid" aria-label="Lista de habitaciones"></section> <!-- Contenedor que JavaScript llena con 20 casillas -->
+                      <p class="helper-text">Marca una o varias habitaciones libres. Las ocupadas o apartadas muestran hasta qué fecha están disponibles u ocupadas.</p> <!-- Texto de ayuda sobre disponibilidad -->
+                     <section id="lista-checkbox-habitaciones" class="checkbox-grid" aria-label="Lista de habitaciones"></section> <!-- Contenedor que JavaScript llena con 20 casillas -->
                     <small class="error-msg" id="err-habitaciones"></small> <!-- Mensaje de error si no elige habitación -->
                 </fieldset> <!-- Cierra el segundo grupo de campos -->
-
                 <fieldset> <!-- Tercer grupo de campos: fechas y huéspedes -->
-                    <legend>3. Fechas de Estancia (Entrada y Fecha Límite)</legend> <!-- Título del bloque de fechas y personas -->
-
-                    <label for="fecha_entrada">Fecha de Llegada (Check-in) *</label> <!-- Etiqueta para la fecha de entrada -->
-                    <input type="date" id="fecha_entrada" name="fecha_entrada" required> <!-- Selector de calendario para llegada -->
-                    <small class="error-msg" id="err-entrada"></small> <!-- Mensaje de error para fecha de entrada -->
-
-                    <label for="fecha_limite">Fecha Límite / Salida (Check-out) *</label> <!-- Etiqueta para la fecha de salida -->
-                    <input type="date" id="fecha_limite" name="fecha_limite" required> <!-- Selector de calendario para salida -->
-                    <small class="error-msg" id="err-limite"></small> <!-- Mensaje de error si salida es anterior a entrada -->
-
-                    <label for="adultos">Cantidad de Adultos *</label> <!-- Etiqueta del número de adultos -->
-                    <input type="number" id="adultos" name="adultos" min="1" max="15" value="2" required> <!-- Campo numérico para cantidad de adultos -->
-                    <small class="error-msg" id="err-adultos"></small> <!-- Mensaje de error para cantidad de adultos -->
-
-                    <label for="infantes">Cantidad de Infantes / Niños (0 a 12 años) *</label> <!-- Etiqueta del número de niños -->
-                    <input type="number" id="infantes" name="infantes" min="0" max="10" value="0" required> <!-- Campo numérico para cantidad de infantes -->
-
-                    <label for="comentarios">Comentarios o Peticiones Especiales *</label> <!-- Etiqueta para observaciones del huésped -->
+                     <legend>3. Fechas de Estancia (Entrada y Fecha Límite)</legend> <!-- Título del bloque de fechas y personas -->
+                      <label for="fecha_entrada">Fecha de Llegada (Check-in) *</label> <!-- Etiqueta para la fecha de entrada -->
+                     <input type="date" id="fecha_entrada" name="fecha_entrada" required> <!-- Selector de calendario para llegada -->
+                      <small class="error-msg" id="err-entrada"></small> <!-- Mensaje de error para fecha de entrada -->
+                <label for="fecha_limite">Fecha Límite / Salida (Check-out) *</label> <!-- Etiqueta para la fecha de salida -->
+                 <input type="date" id="fecha_limite" name="fecha_limite" required> <!-- Selector de calendario para salida -->
+                  <small class="error-msg" id="err-limite"></small> <!-- Mensaje de error si salida es anterior a entrada -->
+                <label for="adultos">Cantidad de Adultos *</label> <!-- Etiqueta del número de adultos -->
+                <input type="number" id="adultos" name="adultos" min="1" max="15" value="2" required> <!-- Campo numérico para cantidad de adultos -->
+                <small class="error-msg" id="err-adultos"></small> <!-- Mensaje de error para cantidad de adultos -->
+                     <label for="infantes">Cantidad de Infantes / Niños (0 a 12 años) *</label> <!-- Etiqueta del número de niños -->
+                     <input type="number" id="infantes" name="infantes" min="0" max="10" value="0" required> <!-- Campo numérico para cantidad de infantes -->
+                     <label for="comentarios">Comentarios o Peticiones Especiales *</label> <!-- Etiqueta para observaciones del huésped -->
                     <textarea id="comentarios" name="comentarios" rows="3" placeholder="Horarios de llegada, alergias o solicitudes especiales..." required minlength="10" maxlength="500"></textarea> <!-- Área de texto para peticiones especiales -->
                     <small class="error-msg" id="err-comentarios"></small> <!-- Mensaje de error si el comentario es corto -->
                 </fieldset> <!-- Cierra el tercer grupo de campos -->
-
                 <!-- Cupón promocional de temporada -->
                 <fieldset> <!-- Cuarto grupo de campos: cupón de descuento -->
                     <legend>4. Cupón de Descuento (Opcional)</legend> <!-- Título del bloque de promociones -->
                     <div style="display: flex; gap: 0.6rem; flex-wrap: wrap;"> <!-- Contenedor en fila para input y botón -->
-                        <input type="text" id="codigo_cupon" placeholder="Ej. NAVIDAD25 o FLAMINGO50" style="flex: 1 1 200px; text-transform: uppercase;"> <!-- Campo para escribir el código en mayúsculas -->
+                     <input type="text" id="codigo_cupon" placeholder="Ej. NAVIDAD25 o FLAMINGO50" style="flex: 1 1 200px; text-transform: uppercase;"> <!-- Campo para escribir el código en mayúsculas -->
                         <button type="button" id="btn-aplicar-cupon" class="btn-secondary">Aplicar Cupón</button> <!-- Botón que valida y aplica el descuento -->
                     </div> <!-- Cierra el contenedor del cupón -->
                     <small id="msg-cupon" style="display: block; margin-top: 0.35rem; font-weight: 600;"></small> <!-- Texto que confirma si el cupón es válido -->
                 </fieldset> <!-- Cierra el cuarto grupo de campos -->
-
                 <p id="resumen-cotizacion" class="cotizacion-box">Total estimado: <strong>$0 MXN</strong> (0 noches)</p> <!-- Muestra el costo total calculado en vivo -->
-
                 <button type="submit" class="btn-primary btn-block">Confirmar Reservación</button> <!-- Botón principal para guardar la reserva -->
             </form> <!-- Cierra el formulario de reservación -->
         </section> <!-- Cierra la columna izquierda -->
-
         <aside class="panel-card sidebar-about" aria-labelledby="consulta-heading"> <!-- Columna derecha para consultar o cancelar reservas -->
             <header class="panel-header"> <!-- Encabezado de la sección lateral -->
                 <h2 id="consulta-heading">Consultar o Cancelar mi Reserva</h2> <!-- Subtítulo de gestión de cuenta -->
                 <p>Ingresa el usuario y contraseña que creaste al reservar.</p> <!-- Instrucción para iniciar sesión de huésped -->
             </header> <!-- Cierra el encabezado lateral -->
 
-            <figure style="text-align: center; margin: 0 auto 1rem auto;">
-    <img src="https://i.ibb.co/FbTkwz5N/IMAGEN.jpg" alt="Logo The Flamingo Palace" style="width: 140px; height: 140px; border-radius: 50%; object-fit: cover; border: 3px solid #ea580c; box-shadow: 0 4px 12px rgba(234, 88, 12, 0.25);">
-</figure>
+            <figure style="text-align: center; margin: 0 auto 1rem auto;"> <!-- Centra el logotipo del hotel -->
+                <img src="https://i.ibb.co/FbTkwz5N/IMAGEN.jpg" alt="Logo The Flamingo Palace" style="width: 140px; height: 140px; border-radius: 50%; object-fit: cover; border: 3px solid #ea580c; box-shadow: 0 4px 12px rgba(234, 88, 12, 0.25);"> <!-- Imagen circular del logotipo oficial -->
+            </figure> <!-- Cierra el contenedor del logotipo -->
 
             <form id="form-consulta-huesped" class="booking-form" novalidate> <!-- Formulario para buscar la reservación del cliente -->
                 <label for="login_usuario">Usuario</label> <!-- Etiqueta del campo de usuario -->
@@ -131,10 +109,32 @@
                 <label for="login_password">Contraseña</label> <!-- Etiqueta del campo de contraseña -->
                 <input type="password" id="login_password" placeholder="Tu contraseña" required> <!-- Campo para ingresar la contraseña registrada -->
 
-                <button type="submit" class="btn-secondary btn-block" style="margin-top: 1rem;">Ver mi Reservación</button> <!-- Botón que busca la reserva en Firebase -->
+                <button type="submit" class="btn-secondary btn-block" style="margin-top: 1rem;">Ver mi Reservación</button> <!-- Botón que busca la reserva en Supabase -->
             </form> <!-- Cierra el formulario de consulta -->
 
+            <div style="margin-top: 0.75rem; text-align: center;"> <!-- Enlace desplegable para recuperación de cuenta -->
+                <button type="button" id="btn-toggle-recuperar" style="background: none; border: none; color: var(--color-primary-dark); text-decoration: underline; font-weight: 600; cursor: pointer; font-size: 0.92rem;">¿Olvidaste tu usuario o contraseña?</button> <!-- Botón que muestra u oculta el formulario de recuperación -->
+            </div> <!-- Cierra el contenedor del enlace -->
+
+            <form id="form-recuperar-cuenta" class="booking-form" hidden style="margin-top: 1rem; padding: 1rem; background: #fffbeb; border: 1.5px solid #fde68a; border-radius: 10px;"> <!-- Formulario oculto para validar identidad con nombre y teléfono -->
+                <h3 style="margin: 0 0 0.35rem; color: var(--color-primary-dark); font-size: 1.05rem;">Recuperar Acceso</h3> <!-- Título de la tarjeta de recuperación -->
+                <p style="font-size: 0.85rem; color: #57534e; margin-bottom: 0.75rem;">Ingresa exactamente el nombre completo y el teléfono de 10 dígitos con los que reservaste.</p> <!-- Instrucción de validación -->
+
+                <label for="rec_nombre">Nombre Completo Registrado *</label> <!-- Etiqueta del campo de nombre -->
+                <input type="text" id="rec_nombre" placeholder="Ej. Axel Tadeo Bueno Vallejo" required> <!-- Campo para ingresar el nombre registrado -->
+
+                <label for="rec_telefono">Teléfono Registrado (10 dígitos) *</label> <!-- Etiqueta del campo de teléfono -->
+                <input type="tel" id="rec_telefono" placeholder="4778909899" pattern="[0-9]{10}" required> <!-- Campo para ingresar el teléfono de 10 dígitos -->
+
+                <label for="rec_nueva_pass">Nueva Contraseña (opcional, mín. 4 caracteres)</label> <!-- Etiqueta para actualizar contraseña si se desea -->
+                <input type="password" id="rec_nueva_pass" placeholder="Déjalo vacío para ver tu contraseña actual" minlength="4"> <!-- Campo opcional para cambiar la contraseña en Supabase -->
+
+                <button type="submit" class="btn-primary btn-block" style="margin-top: 0.85rem;">Verificar y Recuperar Cuenta</button> <!-- Botón que consulta la tabla usuarios en Supabase -->
+                <div id="resultado-recuperacion" style="margin-top: 0.75rem; font-size: 0.9rem;"></div> <!-- Contenedor donde se muestran usuario, contraseña o errores -->
+            </form> <!-- Cierra el formulario de recuperación -->
+
             <section id="resultado-reserva-huesped" class="resultado-cuenta" hidden></section> <!-- Caja oculta donde se muestra la reserva -->
+            <button type="button" id="btn-cerrar-sesion-huesped" class="btn-danger btn-block" style="margin-top: 0.85rem;" hidden>Cerrar Sesión y Limpiar Formulario</button> <!-- Botón oculto que cierra la sesión y reinicia formularios -->
         </aside> <!-- Cierra la columna derecha -->
     </main> <!-- Cierra el contenedor principal -->
 
@@ -160,7 +160,7 @@
         </nav> <!-- Cierra la navegación social del pie -->
         <section> <!-- Columna derecha del pie de página -->
             <p>&copy; 2026 The Flamingo Palace. Todos los derechos reservados.</p> 
-             <p> Tabajo escolar de alumnos del cbtis 225 Leon GTO Mexico.</p>
+             <p> Tabajo escolar de alumnos dels cbtis 225 Leon GTO Mexico.</p>
              <p>Bueno Vallejo Axel Tadeo</p>
             <p>Hassel Alexader Chavez Medina.</p>
             <!-- Aviso de derechos de autor -->

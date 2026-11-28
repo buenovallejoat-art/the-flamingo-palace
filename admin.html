@@ -14,8 +14,9 @@
             <p>Panel exclusivo de administración de las 20 habitaciones, fechas límite y reservaciones</p> <!-- Subtítulo explicativo del panel -->
         </section> <!-- Cierra la sección de marca -->
         <nav aria-label="Navegación administrativa"> <!-- Menú de navegación del administrador -->
-            <ul class="nav-links" style="display: flex; position: static; height: auto; width: auto; background: transparent; box-shadow: none; padding: 0;"> <!-- Lista horizontal con estilos en línea para el enlace -->
+            <ul class="nav-links" style="display: flex; align-items: center; gap: 1rem; position: static; height: auto; width: auto; background: transparent; box-shadow: none; padding: 0;"> <!-- Lista horizontal con enlace y botón de cierre -->
                 <li><a href="index.html" target="_blank" rel="noopener noreferrer">Abrir Sitio Público &nearr;</a></li> <!-- Abre la página principal del hotel en pestaña nueva -->
+                <li><button type="button" id="btn-cerrar-admin-header" class="btn-danger" hidden>Cerrar Sesión</button></li> <!-- Botón en cabecera para cerrar sesión del panel -->
             </ul> <!-- Cierra la lista de navegación -->
         </nav> <!-- Cierra el menú administrativo -->
     </header> <!-- Cierra el encabezado superior -->
@@ -25,9 +26,9 @@
                  <h2>Acceso Administrativo</h2> <!-- Subtítulo del formulario de ingreso -->
                 <p>Ingresa las credenciales del personal autorizado de The Flamingo Palace.</p> <!-- Instrucción para el personal autorizado -->
             </header> <!-- Cierra el encabezado de acceso -->
-            <figure style="text-align: center; margin:0 auto 1rem auto;">
-    <img src="https://i.ibb.co/FbTkwz5N/IMAGEN.jpg" alt="Logo The Flamingo Palace" style="width: 140px; height: 140px; border-radius: 50%; object-fit: cover; border: 3px solid #ea580c; box-shadow: 0 4px 12px rgba(234, 88, 12, 0.25);">
-</figure>
+            <figure style="text-align: center; margin:0 auto 1rem auto;"> <!-- Centra el logotipo oficial del hotel -->
+                <img src="https://i.ibb.co/FbTkwz5N/IMAGEN.jpg" alt="Logo The Flamingo Palace" style="width: 140px; height: 140px; border-radius: 50%; object-fit: cover; border: 3px solid #ea580c; box-shadow: 0 4px 12px rgba(234, 88, 12, 0.25);"> <!-- Imagen circular del logotipo corporativo -->
+            </figure> <!-- Cierra el contenedor del logotipo -->
             <form id="form-admin-login" class="booking-form"> <!-- Formulario validado por JavaScript para entrar al panel -->
          <label for="admin_user">Usuario Empresa *</label> <!-- Etiqueta del campo de usuario -->
               <input type="text" id="admin_user" placeholder="admin" required> <!-- Campo obligatorio para escribir el usuario -->
@@ -48,7 +49,8 @@
                 <button type="button" id="btn-cerrar-admin" class="btn-secondary">Cerrar Sesión</button> <!-- Botón para salir y ocultar el panel -->
             </header> <!-- Cierra la barra superior -->
 
-     <section class="grid-catalogo-mini" style="margin-bottom: 1.5rem;"> <!-- Cuadrícula con dos tarjetas de resumen -->            <article class="card" style="padding: 1rem;"> <!-- Primera tarjeta: ocupación general -->
+     <section class="grid-catalogo-mini" style="margin-bottom: 1.5rem;"> <!-- Cuadrícula con dos tarjetas de resumen -->
+            <article class="card" style="padding: 1rem;"> <!-- Primera tarjeta: ocupación general -->
                     <h3>Estado de Ocupación (20 Habitaciones)</h3> <!-- Título de la tarjeta de ocupación -->
               <p id="admin-resumen-ocupacion" class="precio">0 Ocupadas / 20 Libres (0%)</p> <!-- Texto que JavaScript actualiza con la ocupación real -->
                 <progress id="admin-barra-ocupacion" value="0" max="20" style="width: 100%; margin-top: 0.5rem;">0</progress> <!-- Barra visual del total de habitaciones ocupadas -->
@@ -69,9 +71,9 @@
                         <tr> <!-- Fila de títulos de columna -->
                               <th>Habitación</th> <!-- Columna del número y nombre de habitación -->
                              <th>Tarifa / Noche</th> <!-- Columna del precio por noche -->
-                             <th>Estado</th> <!-- Columna que indica si está libre u ocupada -->
-                            <th>Huésped</th> <!-- Columna con el nombre del cliente actual -->
-                             <th>Se desocupa el (Fecha Límite)</th> <!-- Columna con la fecha de salida -->
+                             <th>Estado</th> <!-- Columna que indica si está libre, apartada u ocupada -->
+                            <th>Huésped</th> <!-- Columna con el nombre del cliente actual o futuro -->
+                             <th>Se desocupa el (Fecha Límite)</th> <!-- Columna con la fecha de salida o entrada próxima -->
                             <th>Acción</th> <!-- Columna para los botones de cobrar pago o liberar habitación -->
                         </tr> <!-- Cierra la fila de encabezados -->
                     </thead> <!-- Cierra la cabecera de la tabla -->
@@ -87,7 +89,7 @@
                 placeholder="Buscar por folio (FP-...), huésped, usuario o habitación..."
                     aria-label="Buscar reservación"
                     style="flex: 1 1 260px; padding: 0.65rem 0.9rem; border: 1.5px solid var(--color-border); border-radius: 8px; font-family: inherit;"
-                >
+                > <!-- Cierra el campo de búsqueda -->
                 <!-- Lista desplegable para filtrar por estado de reserva -->
                 <select
                     id="admin-filtro-estatus"
@@ -116,6 +118,28 @@
                       <tbody id="tabla-reservaciones-admin"></tbody> <!-- Cuerpo vacío que JavaScript llena desde Supabase -->
                   </table> <!-- Cierra la tabla del historial -->
             </section> <!-- Cierra el contenedor adaptable -->
+
+            <h3 style="color: var(--color-primary-dark); margin: 2rem 0 0.75rem;">3. Consultas Directas a la Base de Datos (Supabase PostgreSQL)</h3> <!-- Subtítulo del módulo de consultas SQL -->
+            <section class="card" style="padding: 1.25rem; margin-bottom: 1.5rem;"> <!-- Contenedor interactivo para consultas SQL -->
+                <p style="margin-bottom: 0.85rem; color: var(--color-text-muted);">Selecciona una consulta relacional o de agregación para ejecutarla en tiempo real sobre PostgreSQL:</p> <!-- Instrucción del visor de consultas -->
+                <div style="display: flex; flex-wrap: wrap; gap: 0.6rem; margin-bottom: 1rem;"> <!-- Fila de botones para disparar cada consulta -->
+                    <button type="button" class="btn-primary" onclick="ejecutarConsultaBD('join_huespedes')">1. INNER JOIN (Reservas + Huéspedes)</button> <!-- Ejecuta unión relacional entre ingresos_reservaciones y usuarios -->
+                    <button type="button" class="btn-secondary" onclick="ejecutarConsultaBD('ingresos_cupon')">2. GROUP BY (Ingresos por Cupón)</button> <!-- Ejecuta agrupación con COUNT y SUM por cupón -->
+                    <button type="button" class="btn-secondary" onclick="ejecutarConsultaBD('solo_pagadas')">3. WHERE (Solo Pagadas en Caja)</button> <!-- Filtra reservaciones liquidadas en recepción -->
+                    <button type="button" class="btn-secondary" onclick="ejecutarConsultaBD('habitaciones_ocupadas')">4. Tabla Habitaciones (Ocupadas)</button> <!-- Consulta los cuartos ocupados actualmente -->
+                </div> <!-- Cierra la barra de botones de consulta -->
+
+                <pre id="visor-sql-consulta" style="background: #1c1917; color: #fed7aa; padding: 0.85rem 1rem; border-radius: 8px; font-size: 0.85rem; overflow-x: auto; margin-bottom: 1rem;">-- Presiona un botón arriba para ejecutar una consulta real en Supabase...</pre> <!-- Bloque de código que muestra la sentencia SQL equivalente -->
+
+                <div class="table-responsive"> <!-- Contenedor adaptable para la tabla de resultados SQL -->
+                    <table class="tabla-admin"> <!-- Tabla dinámica con los resultados de la consulta -->
+                        <thead id="thead-consulta-bd"></thead> <!-- Encabezados generados por JavaScript según la consulta -->
+                        <tbody id="tbody-consulta-bd"> <!-- Filas con los datos reales devueltos por Supabase -->
+                            <tr><td style="text-align: center; color: #57534e;">Sin consulta ejecutada todavía.</td></tr> <!-- Mensaje inicial antes de ejecutar consultas -->
+                        </tbody> <!-- Cierra el cuerpo de resultados -->
+                    </table> <!-- Cierra la tabla de consultas -->
+                </div> <!-- Cierra el contenedor responsivo -->
+            </section> <!-- Cierra la sección de consultas SQL -->
         </section> <!-- Cierra el panel administrativo -->
     </main> <!-- Cierra el contenedor principal -->
     <footer class="site-footer"> <!-- Pie de página del sistema interno -->
@@ -124,11 +148,10 @@
       <p>Av. Pacífico #104, Bucerías, Nayarit, México.</p> <!-- Dirección del establecimiento -->
          </section> <!-- Cierra la columna izquierda -->
         <section> <!-- Columna derecha del pie de página -->
-            <p>&copy; 2026 The Flamingo Palace. Sistema de Control Interno.</p>
-             <!-- Aviso de derechos y uso interno -->
-                <p> Tabajo escolar de alumnos del cbtis 225 Leon GTO Mexico.</p>
-               <p>Bueno Vallejo Axel Tadeo</p>
-              <p>Hassel Alexader Chavez Medina.</p>
+            <p>&copy; 2026 The Flamingo Palace. Sistema de Control Interno.</p> <!-- Aviso de derechos y uso interno -->
+                <p> Tabajo escolar de alumnos del cbtis 225 Leon GTO Mexico.</p> <!-- Institución educativa y sede -->
+               <p>Bueno Vallejo Axel Tadeo</p> <!-- Primer integrante del equipo -->
+              <p>Hassel Alexader Chavez Medina.</p> <!-- Segundo integrante del equipo -->
         </section> <!-- Cierra la columna derecha -->
     </footer> <!-- Cierra el pie de página -->
     <script type="module" src="main.js"></script> <!-- Carga el archivo JavaScript principal como módulo -->

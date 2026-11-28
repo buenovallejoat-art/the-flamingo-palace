@@ -137,24 +137,65 @@ async function sincronizarDesdeSupabase() {
   }
 }
 
-function obtenerEstadoHabitacion(habId) {
+// =========================================================
+// CONTROL DE DISPONIBILIDAD POR FECHAS Y RESERVAS FUTURAS
+// =========================================================
+function obtenerEstadoHabitacion(habId, excluirFolio = null) {
   const hoy = new Date().toISOString().split("T")[0];
-  const activa = obtenerReservaciones().find(res =>
+  const reservasActivas = obtenerReservaciones().filter(res =>
     (res.estado === "Activa" || res.estado === "Pagada") &&
-    res.fechaLimite >= hoy &&
+    res.folio !== excluirFolio &&
     Array.isArray(res.habitaciones) &&
     res.habitaciones.includes(habId)
   );
-  if (activa) {
+
+  // 1. Ocupada hoy mismo (fechaEntrada <= hoy < fechaLimite)
+  const ocupadaHoy = reservasActivas.find(res =>
+    res.fechaEntrada <= hoy && res.fechaLimite > hoy
+  );
+  if (ocupadaHoy) {
     return {
       ocupada: true,
-      huesped: activa.nombre,
-      hasta: activa.fechaLimite,
-      folio: activa.folio,
-      estadoPago: activa.estado
+      futura: false,
+      huesped: ocupadaHoy.nombre,
+      hasta: ocupadaHoy.fechaLimite,
+      folio: ocupadaHoy.folio,
+      estadoPago: ocupadaHoy.estado
     };
   }
-  return { ocupada: false };
+
+  // 2. Libre hoy, pero con reserva futura próxima (ej. inicia el 30 nov -> disponible hasta el 30 nov)
+  const proximaReserva = reservasActivas
+    .filter(res => res.fechaEntrada > hoy)
+    .sort((a, b) => a.fechaEntrada.localeCompare(b.fechaEntrada))[0];
+
+  if (proximaReserva) {
+    return {
+      ocupada: false,
+      futura: true,
+      huesped: proximaReserva.nombre,
+      disponibleHasta: proximaReserva.fechaEntrada,
+      hasta: proximaReserva.fechaLimite,
+      folio: proximaReserva.folio,
+      estadoPago: proximaReserva.estado
+    };
+  }
+
+  return { ocupada: false, futura: false };
+}
+
+// Verifica si el rango [entrada, limite] se traslapa con una reserva existente
+// Permite salir el mismo día que empieza la siguiente reserva (limite <= res.fechaEntrada)
+function verificarCruceFechas(habId, entrada, limite, excluirFolio = null) {
+  if (!entrada || !limite) return null;
+  const reservasCuarto = obtenerReservaciones().filter(res =>
+    (res.estado === "Activa" || res.estado === "Pagada") &&
+    res.folio !== excluirFolio &&
+    Array.isArray(res.habitaciones) &&
+    res.habitaciones.includes(habId)
+  );
+
+  return reservasCuarto.find(res => entrada < res.fechaLimite && limite > res.fechaEntrada) || null;
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -185,6 +226,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   inicializarFormularioReserva();
   inicializarConsultaHuesped();
+  inicializarRecuperacionCuenta();
   inicializarPanelAdmin();
   inicializarFiltrosCatalogo();
   inicializarModalesHabitaciones();
@@ -227,6 +269,11 @@ function actualizarCatalogoServicios() {
         badge.className = "estado-badge ocupada";
         btn.textContent = `Se desocupa el ${estado.hasta}`;
         btn.classList.add("deshabilitado");
+      } else if (estado.futura) {
+        badge.textContent = `Disponible hasta el ${estado.disponibleHasta}`;
+        badge.className = "estado-badge futura";
+        btn.textContent = `Reservar (antes del ${estado.disponibleHasta})`;
+        btn.classList.remove("deshabilitado");
       } else {
         badge.textContent = "Disponible";
         badge.className = "estado-badge libre";
@@ -300,7 +347,7 @@ function inicializarModalesHabitaciones() {
             <button type="button" id="cerrar-modal-hab-btn" class="btn-secondary">Cerrar</button>
             ${estado.ocupada
               ? `<span style="padding: 0.6rem 1rem; background: #fee2e2; color: #991b1b; border-radius: 8px; font-weight: 600; font-size: 0.9rem;">Ocupada hasta ${estado.hasta}</span>`
-              : `<a href="contacto.html?hab=${infoHab.id}#formulario" class="btn-primary">Reservar ahora</a>`
+              : `<a href="contacto.html?hab=${infoHab.id}#formulario" class="btn-primary">${estado.futura ? `Reservar (antes del ${estado.disponibleHasta})` : "Reservar ahora"}</a>`
             }
           </footer>
         </article>
@@ -357,14 +404,19 @@ function renderizarCheckboxesHabitaciones() {
   if (!listaCheckboxes) return;
   const params = new URLSearchParams(window.location.search);
   const habPreseleccionada = params.get("hab");
+  const entradaElegida = document.getElementById("fecha_entrada")?.value || "";
+  const limiteElegida = document.getElementById("fecha_limite")?.value || "";
+  const folioActual = reservaEnEdicion ? reservaEnEdicion.folio : null;
+
   const marcadasPrevias = new Set(
     Array.from(listaCheckboxes.querySelectorAll('input[name="habitaciones"]:checked')).map(cb => cb.value)
   );
   listaCheckboxes.innerHTML = "";
   HABITACIONES_CATALOGO.forEach(hab => {
-    const estado = obtenerEstadoHabitacion(hab.id);
-    const esDeReservaEditada = reservaEnEdicion && Array.isArray(reservaEnEdicion.habitaciones) && reservaEnEdicion.habitaciones.includes(hab.id);
-    const bloqueada = estado.ocupada && !esDeReservaEditada;
+    const estado = obtenerEstadoHabitacion(hab.id, folioActual);
+    const cruceFechas = verificarCruceFechas(hab.id, entradaElegida, limiteElegida, folioActual);
+    const bloqueada = estado.ocupada || Boolean(cruceFechas);
+
     const label = document.createElement("label");
     label.className = bloqueada ? "checkbox-item ocupada-item" : "checkbox-item";
     const checkbox = document.createElement("input");
@@ -382,10 +434,18 @@ function renderizarCheckboxesHabitaciones() {
       if (seleccionadas.length > 0) marcarEstadoHabitaciones(true);
       else marcarEstadoHabitaciones(false, "Selecciona al menos una habitación disponible.");
     });
+
     const texto = document.createElement("span");
-    texto.innerHTML = bloqueada
-      ? `<strong>${hab.nombre}</strong> — <em>Ocupada hasta ${estado.hasta}</em>`
-      : `<strong>${hab.nombre}</strong> ($${hab.precio.toLocaleString("es-MX")} MXN/noche)`;
+    if (estado.ocupada) {
+      texto.innerHTML = `<strong>${hab.nombre}</strong> — <em>Ocupada hasta ${estado.hasta}</em>`;
+    } else if (cruceFechas) {
+      texto.innerHTML = `<strong>${hab.nombre}</strong> — <em>Reservada del ${cruceFechas.fechaEntrada} al ${cruceFechas.fechaLimite}</em>`;
+    } else if (estado.futura) {
+      texto.innerHTML = `<strong>${hab.nombre}</strong> ($${hab.precio.toLocaleString("es-MX")} MXN/noche) — <strong style="color:#b45309;">Disponible hasta el ${estado.disponibleHasta}</strong>`;
+    } else {
+      texto.innerHTML = `<strong>${hab.nombre}</strong> ($${hab.precio.toLocaleString("es-MX")} MXN/noche)`;
+    }
+
     label.appendChild(checkbox);
     label.appendChild(texto);
     listaCheckboxes.appendChild(label);
@@ -548,10 +608,12 @@ function inicializarFormularioReserva() {
   });
   inputEntrada.addEventListener("change", () => {
     inputLimite.min = inputEntrada.value || hoy;
+    renderizarCheckboxesHabitaciones();
     calcularCotizacion();
     if (inputEntrada.classList.contains("campo-error") || inputEntrada.classList.contains("campo-valido")) validarCampos();
   });
   inputLimite.addEventListener("change", () => {
+    renderizarCheckboxesHabitaciones();
     calcularCotizacion();
     if (inputLimite.classList.contains("campo-error") || inputLimite.classList.contains("campo-valido")) validarCampos();
   });
@@ -565,13 +627,16 @@ function inicializarFormularioReserva() {
       return;
     }
 
+    const folioExcluido = reservaEnEdicion ? reservaEnEdicion.folio : null;
     const ocupadaReciente = datos.habitaciones.find(id => {
-      const est = obtenerEstadoHabitacion(id);
-      return est.ocupada && (!reservaEnEdicion || est.folio !== reservaEnEdicion.folio);
+      const est = obtenerEstadoHabitacion(id, folioExcluido);
+      const cruce = verificarCruceFechas(id, datos.fechaEntrada, datos.fechaLimite, folioExcluido);
+      return est.ocupada || Boolean(cruce);
     });
     if (ocupadaReciente) {
-      marcarEstadoHabitaciones(false, "Una de las habitaciones elegidas acaba de ser reservada. Elige otra disponible.");
-      mostrarAlertaFormulario("Una de las habitaciones elegidas acaba de ser reservada. Por favor selecciona otra.", "error");
+      renderizarCheckboxesHabitaciones();
+      marcarEstadoHabitaciones(false, "Una de las habitaciones elegidas ya está ocupada o apartada en esas fechas. Elige otra disponible.");
+      mostrarAlertaFormulario("Una de las habitaciones elegidas choca con una reservación existente. Por favor ajusta tus fechas o selecciona otra habitación.", "error");
       return;
     }
 
@@ -657,15 +722,17 @@ function inicializarFormularioReserva() {
         if (errorIns) throw errorIns;
       }
 
-      // 3. Marcar habitaciones seleccionadas como Ocupadas en tabla "habitaciones"
-      await supabase
-        .from("habitaciones")
-        .update({
-          estado: "Ocupada",
-          ocupada_hasta: datos.fechaLimite,
-          folio_actual: folio
-        })
-        .in("id_habitacion", datos.habitaciones);
+      // 3. Actualizar tabla "habitaciones" solo si la reservación ya inicia hoy o antes
+      if (datos.fechaEntrada <= hoy) {
+        await supabase
+          .from("habitaciones")
+          .update({
+            estado: "Ocupada",
+            ocupada_hasta: datos.fechaLimite,
+            folio_actual: folio
+          })
+          .in("id_habitacion", datos.habitaciones);
+      }
 
       const reservaFinal = {
         folio,
@@ -766,10 +833,67 @@ window.editarMiReservacion = function(folio) {
   if (reserva) cargarReservaEnFormulario(reserva);
 };
 
+// =========================================================
+// CIERRE DE SESIÓN COMPLETO EN CABECERA, RESERVACIONES Y CONSULTA
+// =========================================================
+window.cerrarSesionHuesped = function() {
+  reservaEnEdicion = null;
+  descuentoAplicado = 0;
+  codigoCuponActivo = "";
+  sessionStorage.removeItem("flamingo_huesped_sesion");
+
+  const formConsulta = document.getElementById("form-consulta-huesped");
+  const contenedorResultado = document.getElementById("resultado-reserva-huesped");
+  const btnCerrarHuesped = document.getElementById("btn-cerrar-sesion-huesped");
+  const btnCerrarHeader = document.getElementById("btn-cerrar-huesped-header");
+  const formRecuperar = document.getElementById("form-recuperar-cuenta");
+  const salidaRec = document.getElementById("resultado-recuperacion");
+  if (formConsulta) formConsulta.reset();
+  if (formRecuperar) {
+    formRecuperar.reset();
+    formRecuperar.hidden = true;
+  }
+  if (salidaRec) salidaRec.innerHTML = "";
+  if (contenedorResultado) {
+    contenedorResultado.innerHTML = "";
+    contenedorResultado.hidden = true;
+  }
+  if (btnCerrarHuesped) btnCerrarHuesped.hidden = true;
+  if (btnCerrarHeader) btnCerrarHeader.hidden = true;
+
+  const formReserva = document.getElementById("form-reservacion");
+  const alerta = document.getElementById("alerta-formulario");
+  const ticket = document.getElementById("ticket-confirmacion");
+  const msgCupon = document.getElementById("msg-cupon");
+  if (formReserva) {
+    formReserva.reset();
+    const btnSubmit = formReserva.querySelector('button[type="submit"]');
+    if (btnSubmit && btnSubmit.dataset.textoOriginal) {
+      btnSubmit.textContent = btnSubmit.dataset.textoOriginal;
+    }
+  }
+  if (alerta) alerta.hidden = true;
+  if (ticket) {
+    ticket.innerHTML = "";
+    ticket.hidden = true;
+  }
+  if (msgCupon) msgCupon.textContent = "";
+
+  limpiarEstadosVisualesFormulario();
+  renderizarCheckboxesHabitaciones();
+  calcularCotizacion();
+};
+
 function inicializarConsultaHuesped() {
   const formConsulta = document.getElementById("form-consulta-huesped");
   const contenedorResultado = document.getElementById("resultado-reserva-huesped");
+  const btnCerrarHuesped = document.getElementById("btn-cerrar-sesion-huesped");
+  const btnCerrarHeader = document.getElementById("btn-cerrar-huesped-header");
   if (!formConsulta || !contenedorResultado) return;
+
+  if (btnCerrarHuesped) btnCerrarHuesped.addEventListener("click", window.cerrarSesionHuesped);
+  if (btnCerrarHeader) btnCerrarHeader.addEventListener("click", window.cerrarSesionHuesped);
+
   formConsulta.addEventListener("submit", async (e) => {
     e.preventDefault();
     await sincronizarDesdeSupabase();
@@ -778,9 +902,15 @@ function inicializarConsultaHuesped() {
     const misReservas = obtenerReservaciones().filter(r => r.usuario === user && r.password === pass);
     contenedorResultado.hidden = false;
     if (misReservas.length === 0) {
+      if (btnCerrarHuesped) btnCerrarHuesped.hidden = true;
+      if (btnCerrarHeader) btnCerrarHeader.hidden = true;
       contenedorResultado.innerHTML = `<p style="color:#dc2626; font-weight:600;">Usuario o contraseña incorrectos, o no tienes reservaciones registradas.</p>`;
       return;
     }
+    sessionStorage.setItem("flamingo_huesped_sesion", user);
+    if (btnCerrarHuesped) btnCerrarHuesped.hidden = false;
+    if (btnCerrarHeader) btnCerrarHeader.hidden = false;
+
     const reservaParaLlenar = misReservas.find(r => r.estado === "Activa") || misReservas[0];
     cargarReservaEnFormulario(reservaParaLlenar);
     contenedorResultado.innerHTML = misReservas.map(res => {
@@ -808,6 +938,91 @@ function inicializarConsultaHuesped() {
         </article>
       `;
     }).join("");
+  });
+}
+
+// =========================================================
+// RECUPERACIÓN DE USUARIO Y CONTRASEÑA POR NOMBRE Y TELÉFONO
+// =========================================================
+function inicializarRecuperacionCuenta() {
+  const btnToggle = document.getElementById("btn-toggle-recuperar");
+  const formRecuperar = document.getElementById("form-recuperar-cuenta");
+  const salidaRec = document.getElementById("resultado-recuperacion");
+  if (!btnToggle || !formRecuperar || !salidaRec) return;
+
+  btnToggle.addEventListener("click", () => {
+    formRecuperar.hidden = !formRecuperar.hidden;
+    salidaRec.innerHTML = "";
+  });
+
+  formRecuperar.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const nombreInput = document.getElementById("rec_nombre").value.trim();
+    const telInput = document.getElementById("rec_telefono").value.trim();
+    const nuevaPass = document.getElementById("rec_nueva_pass").value.trim();
+
+    if (nombreInput.length < 3 || !/^[0-9]{10}$/.test(telInput)) {
+      salidaRec.innerHTML = `<p style="color:#dc2626; font-weight:600;">Ingresa tu nombre completo y un teléfono válido de 10 dígitos.</p>`;
+      return;
+    }
+
+    if (nuevaPass && nuevaPass.length < 4) {
+      salidaRec.innerHTML = `<p style="color:#dc2626; font-weight:600;">La nueva contraseña debe tener al menos 4 caracteres.</p>`;
+      return;
+    }
+
+    salidaRec.innerHTML = `<p style="color:#78350f;">Verificando datos en Supabase...</p>`;
+
+    try {
+      // Consulta en la tabla "usuarios" filtrando por teléfono exacto
+      const { data, error } = await supabase
+        .from("usuarios")
+        .select("usuario, nombre, telefono, password")
+        .eq("telefono", telInput);
+
+      if (error) throw error;
+
+      // Comparación insensible a mayúsculas/minúsculas, acentos y espacios extra
+      const normalizar = (txt) => txt.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, " ").trim();
+      const coincidencia = (data || []).find(u => normalizar(u.nombre || "") === normalizar(nombreInput));
+
+      if (!coincidencia) {
+        salidaRec.innerHTML = `<p style="color:#dc2626; font-weight:600;">No encontramos ninguna cuenta que coincida con ese nombre y teléfono.</p>`;
+        return;
+      }
+
+      let passwordFinal = coincidencia.password;
+
+      // Si el huésped escribió una nueva contraseña, actualizarla en Supabase
+      if (nuevaPass) {
+        const { error: errUpd } = await supabase
+          .from("usuarios")
+          .update({ password: nuevaPass })
+          .eq("usuario", coincidencia.usuario);
+
+        if (errUpd) throw errUpd;
+        passwordFinal = nuevaPass;
+        await sincronizarDesdeSupabase();
+      }
+
+      // Autocompletar el formulario de inicio de sesión de arriba para facilitar el acceso
+      const inputLoginUser = document.getElementById("login_usuario");
+      const inputLoginPass = document.getElementById("login_password");
+      if (inputLoginUser) inputLoginUser.value = coincidencia.usuario;
+      if (inputLoginPass) inputLoginPass.value = passwordFinal;
+
+      salidaRec.innerHTML = `
+        <div style="padding: 0.75rem; background: #ecfdf5; border: 1px solid #059669; border-radius: 8px; color: #064e3b;">
+          <p style="margin: 0 0 0.25rem; font-weight: 700;">✓ Identidad verificada (${coincidencia.nombre})</p>
+          <p style="margin: 0.15rem 0;"><strong>Usuario:</strong> ${coincidencia.usuario}</p>
+          <p style="margin: 0.15rem 0;"><strong>Contraseña ${nuevaPass ? "actualizada" : "registrada"}:</strong> ${passwordFinal}</p>
+          <small style="display:block; margin-top:0.35rem; color:#047857;">Tus credenciales ya se llenaron arriba; presiona "Ver mi Reservación".</small>
+        </div>
+      `;
+    } catch (err) {
+      console.error("Error al recuperar cuenta:", err);
+      salidaRec.innerHTML = `<p style="color:#dc2626;">Error al consultar Supabase: ${err.message}</p>`;
+    }
   });
 }
 
@@ -913,12 +1128,27 @@ function inicializarPanelAdmin() {
   const loginBox = document.getElementById("admin-login-box");
   const dashboard = document.getElementById("admin-dashboard");
   const btnCerrar = document.getElementById("btn-cerrar-admin");
+  const btnCerrarHeader = document.getElementById("btn-cerrar-admin-header");
   if (!formAdmin || !dashboard) return;
+
+  const ejecutarCierreAdmin = () => {
+    sessionStorage.removeItem("flamingo_admin_sesion");
+    sessionStorage.clear();
+    formAdmin.reset();
+    const recibo = document.getElementById("admin-recibo-pago");
+    if (recibo) { recibo.innerHTML = ""; recibo.hidden = true; }
+    dashboard.hidden = true;
+    loginBox.hidden = false;
+    if (btnCerrarHeader) btnCerrarHeader.hidden = true;
+  };
+
   if (sessionStorage.getItem("flamingo_admin_sesion") === "true") {
     loginBox.hidden = true;
     dashboard.hidden = false;
+    if (btnCerrarHeader) btnCerrarHeader.hidden = false;
     renderizarDashboardAdmin();
   }
+
   formAdmin.addEventListener("submit", (e) => {
     e.preventDefault();
     const u = document.getElementById("admin_user").value.trim();
@@ -927,15 +1157,14 @@ function inicializarPanelAdmin() {
       sessionStorage.setItem("flamingo_admin_sesion", "true");
       loginBox.hidden = true;
       dashboard.hidden = false;
+      if (btnCerrarHeader) btnCerrarHeader.hidden = false;
       renderizarDashboardAdmin();
     } else alert("Credenciales de empresa incorrectas. Usa admin / flamingo2026");
   });
-  if (btnCerrar) {
-    btnCerrar.addEventListener("click", () => {
-      sessionStorage.removeItem("flamingo_admin_sesion");
-      location.reload();
-    });
-  }
+
+  if (btnCerrar) btnCerrar.addEventListener("click", ejecutarCierreAdmin);
+  if (btnCerrarHeader) btnCerrarHeader.addEventListener("click", ejecutarCierreAdmin);
+
   const inputBuscador = document.getElementById("admin-buscador-reservas");
   const selectEstatus = document.getElementById("admin-filtro-estatus");
   if (inputBuscador) inputBuscador.addEventListener("input", renderizarDashboardAdmin);
@@ -960,12 +1189,14 @@ function renderizarDashboardAdmin() {
         <td><strong>${hab.nombre}</strong></td>
         <td>$${hab.precio.toLocaleString("es-MX")} MXN</td>
         <td>
-          <span class="estado-badge ${estado.ocupada ? "ocupada" : "libre"}">
-            ${estado.ocupada ? (estado.estadoPago === "Pagada" ? "Ocupada (Pagada)" : "Ocupada (Pendiente)") : "Disponible"}
+          <span class="estado-badge ${estado.ocupada ? "ocupada" : (estado.futura ? "futura" : "libre")}">
+            ${estado.ocupada
+              ? (estado.estadoPago === "Pagada" ? "Ocupada (Pagada)" : "Ocupada (Pendiente)")
+              : (estado.futura ? `Disponible hasta ${estado.disponibleHasta}` : "Disponible")}
           </span>
         </td>
-        <td>${estado.ocupada ? estado.huesped : "—"}</td>
-        <td>${estado.ocupada ? `<strong>${estado.hasta}</strong>` : "Disponible hoy"}</td>
+        <td>${estado.ocupada ? estado.huesped : (estado.futura ? `Apartada (${estado.huesped})` : "—")}</td>
+        <td>${estado.ocupada ? `<strong>${estado.hasta}</strong>` : (estado.futura ? `Entra el <strong>${estado.disponibleHasta}</strong>` : "Disponible hoy")}</td>
         <td>
           ${estado.ocupada
             ? `<div style="display:flex; gap:0.4rem; flex-wrap:wrap;">
@@ -1047,3 +1278,129 @@ function renderizarDashboardAdmin() {
 
   if (resumenIngresos) resumenIngresos.textContent = `$${ingresosTotales.toLocaleString("es-MX")} MXN`;
 }
+
+// =========================================================
+// MÓDULO DE CONSULTAS SQL / SUPABASE EN VIVO (ADMIN)
+// =========================================================
+window.ejecutarConsultaBD = async function(tipo) {
+  const visorSQL = document.getElementById("visor-sql-consulta");
+  const thead = document.getElementById("thead-consulta-bd");
+  const tbody = document.getElementById("tbody-consulta-bd");
+  if (!visorSQL || !thead || !tbody) return;
+
+  tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;">Consultando Supabase PostgreSQL...</td></tr>`;
+
+  try {
+    if (tipo === "join_huespedes") {
+      visorSQL.textContent =
+`SELECT r.folio, u.nombre AS huesped, u.telefono, r.fecha_entrada, r.fecha_limite, r.total_ingresado, r.estado
+FROM ingresos_reservaciones r
+INNER JOIN usuarios u ON r.usuario_fk = u.usuario
+ORDER BY r.creado_en DESC;`;
+
+      const { data, error } = await supabase
+        .from("ingresos_reservaciones")
+        .select("folio, fecha_entrada, fecha_limite, total_ingresado, estado, usuarios(nombre, telefono)")
+        .order("creado_en", { ascending: false });
+
+      if (error) throw error;
+
+      thead.innerHTML = `<tr><th>Folio</th><th>Huésped (JOIN)</th><th>Teléfono</th><th>Estancia</th><th>Total</th><th>Estado</th></tr>`;
+      tbody.innerHTML = (data || []).map(r => `
+        <tr>
+          <td><strong>${r.folio}</strong></td>
+          <td>${r.usuarios?.nombre || "—"}</td>
+          <td>${r.usuarios?.telefono || "—"}</td>
+          <td>${r.fecha_entrada} &rarr; ${r.fecha_limite}</td>
+          <td>$${Number(r.total_ingresado).toLocaleString("es-MX")} MXN</td>
+          <td>${r.estado}</td>
+        </tr>
+      `).join("") || `<tr><td colspan="6">Sin registros.</td></tr>`;
+    }
+
+    else if (tipo === "ingresos_cupon") {
+      visorSQL.textContent =
+`SELECT cupon, COUNT(*) AS total_reservas, SUM(descuento) AS total_descontado, SUM(total_ingresado) AS ingresos_netos
+FROM ingresos_reservaciones
+WHERE estado <> 'Cancelada'
+GROUP BY cupon;`;
+
+      const { data, error } = await supabase
+        .from("ingresos_reservaciones")
+        .select("cupon, descuento, total_ingresado, estado")
+        .neq("estado", "Cancelada");
+
+      if (error) throw error;
+
+      const resumen = {};
+      (data || []).forEach(r => {
+        const key = r.cupon || "Ninguno";
+        if (!resumen[key]) resumen[key] = { cantidad: 0, descuento: 0, total: 0 };
+        resumen[key].cantidad += 1;
+        resumen[key].descuento += Number(r.descuento) || 0;
+        resumen[key].total += Number(r.total_ingresado) || 0;
+      });
+
+      thead.innerHTML = `<tr><th>Cupón Aplicado</th><th>Reservaciones (COUNT)</th><th>Total Descontado (SUM)</th><th>Ingresos Netos (SUM)</th></tr>`;
+      tbody.innerHTML = Object.entries(resumen).map(([cupon, info]) => `
+        <tr>
+          <td><strong>${cupon}</strong></td>
+          <td>${info.cantidad}</td>
+          <td>$${info.descuento.toLocaleString("es-MX")} MXN</td>
+          <td><strong>$${info.total.toLocaleString("es-MX")} MXN</strong></td>
+        </tr>
+      `).join("") || `<tr><td colspan="4">Sin datos activos.</td></tr>`;
+    }
+
+    else if (tipo === "solo_pagadas") {
+      visorSQL.textContent =
+`SELECT folio, usuario_fk, habitaciones_ids, total_ingresado
+FROM ingresos_reservaciones
+WHERE estado = 'Pagada';`;
+
+      const { data, error } = await supabase
+        .from("ingresos_reservaciones")
+        .select("folio, usuario_fk, habitaciones_ids, total_ingresado")
+        .eq("estado", "Pagada");
+
+      if (error) throw error;
+
+      thead.innerHTML = `<tr><th>Folio</th><th>Usuario FK</th><th>Habitaciones (Arreglo)</th><th>Monto Cobrado</th></tr>`;
+      tbody.innerHTML = (data || []).map(r => `
+        <tr>
+          <td><strong>${r.folio}</strong></td>
+          <td>${r.usuario_fk}</td>
+          <td>${(r.habitaciones_ids || []).join(", ")}</td>
+          <td><strong>$${Number(r.total_ingresado).toLocaleString("es-MX")} MXN</strong></td>
+        </tr>
+      `).join("") || `<tr><td colspan="4" style="text-align:center;">Aún no hay reservaciones con estado 'Pagada'.</td></tr>`;
+    }
+
+    else if (tipo === "habitaciones_ocupadas") {
+      visorSQL.textContent =
+`SELECT id_habitacion, estado, ocupada_hasta, folio_actual
+FROM habitaciones
+WHERE estado = 'Ocupada';`;
+
+      const { data, error } = await supabase
+        .from("habitaciones")
+        .select("id_habitacion, estado, ocupada_hasta, folio_actual")
+        .eq("estado", "Ocupada");
+
+      if (error) throw error;
+
+      thead.innerHTML = `<tr><th>ID Habitación</th><th>Estado</th><th>Ocupada Hasta</th><th>Folio Actual</th></tr>`;
+      tbody.innerHTML = (data || []).map(h => `
+        <tr>
+          <td><strong>${h.id_habitacion}</strong></td>
+          <td>${h.estado}</td>
+          <td>${h.ocupada_hasta || "—"}</td>
+          <td>${h.folio_actual || "—"}</td>
+        </tr>
+      `).join("") || `<tr><td colspan="4" style="text-align:center;">Todas las habitaciones están libres hoy.</td></tr>`;
+    }
+  } catch (err) {
+    console.error("Error en consulta BD:", err);
+    tbody.innerHTML = `<tr><td colspan="6" style="color:#dc2626;">Error al ejecutar consulta: ${err.message}</td></tr>`;
+  }
+};
